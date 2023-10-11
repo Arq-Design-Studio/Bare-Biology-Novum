@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  {% include '_store_credits.css' %}
+</style>
+
+
+<div id="PaymentMethodsPage" class="payment-methods-page">
+  <h3 class="rc-heading d-flex justify-space-between align-items-center">
+    {{ 'cp_nav_payment_methods' | t }}
+    <button class="add-payment-method rc_btn rc_btn--secondary d-none">
+      {% if useMultiplePaymentMethods or not payment_methods | length %}
+      {{ 'cp_payment_methods_add_header_btn' | t }}
+      {% else %}
+      {{ 'cp_payment_methods_spm_change_payment_method_btn' | t }}
+      {% endif %}
+    </button>
+  </h3>
+    <div id="store-credits" class="store-credit-full-width" style="margin-bottom: 12px;"></div>
+</div>
+
+<script>
+  window.ReCharge.Novum.store = {{ store | json }};
+  window.ReCharge.Novum.addresses = {{ addresses | json }};
+
+  {% include '_payment-methods.js' %}
+  
+  const settings = {{ settings | json }}
+  if (settings?.customer_portal?.show_credits) {
+    const currency = {{ store.currency | json }};
+    window.ReCharge.Components.renderStoreCredits(currency);
+  }
+</script>
+{% endblock %}

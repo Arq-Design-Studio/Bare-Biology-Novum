@@ -1,0 +1,126 @@
+{% if customer and 
+    customer.include and 
+    customer.include.payment_methods and 
+    customer.include.payment_methods | length > 0 
+%}
+    {# New way of retrieving payment/billing information #}
+    {% set recharge_payment_method_list = customer.include.payment_methods | rejectattr("processor_name", "equalto", "shopify_payments") | list | sort(reverse=true, attribute='default') %}
+    {% if recharge_payment_method_list | length > 0 %}
+        {% set payment_method = recharge_payment_method_list | first %}
+        {% set payment_method_id = payment_method.id %}
+        <!-- Include billing adddress -->
+        {% include '_billing_address_card.html' %}
+        <!-- Include card on file -->
+        {% include '_payment_information_card.html' %}
+        <!-- Include credit card form modal -->
+        {% include '_credit_card_form.html' %}
+    {% else %}
+        {# We assume that we only have Shopify payments at this point #}
+        {% set shopify_default_payment_method = customer.include.payment_methods | selectattr("default") | first %}
+        {% set shopify_latest_payment_method = customer.include.payment_methods | sort(reverse=true, attribute='updated_at') | first %}
+        {% set payment_method = shopify_default_payment_method if shopify_default_payment_method else shopify_latest_payment_method %}
+
+        {% if payment_method.processor_name == 'shopify_payments' %}
+            {% include '_shopify_connector_payment_information_card.html' %}
+        {% else %}
+            <!-- Include billing adddress -->
+            {% include '_billing_address_card.html' %}
+            <!-- Include card on file -->
+            {% include '_payment_information_card.html' %}
+                <!-- Include credit card form modal -->
+            {% include '_credit_card_form.html' %}
+        {% endif %}
+
+        {% if customer.can_add_payment_method %}
+            <button 
+                class="rc_btn--secondary rc_btn--secondary--color title-bold text-center js-edit-billing-card" 
+                style="display: inline-block;"
+            >{{ 'cp_add_card' | t }}</button>
+            <button 
+                class="rc_btn--secondary rc_btn--secondary--color title-bold text-center" 
+                style="display: inline-block;"
+                data-add-billing-address
+                data-title="{{ 'cp_add_billing_address_label' | t }}"
+                onclick="addBillingAddressHandler(event)"
+            >{{ 'Add_Address' | t }}</button>
+        {% endif %}
+    {% endif %}
+    <script>
+        (function() {
+            ReCharge.Novum.payment_sources = {{ payment_sources | json }};
+            ReCharge.Novum.payment_methods = {{ customer.include.payment_methods | json }};
+            ReCharge.Novum.settings = {{ settings | json }};
+            ReCharge.Novum.customer = {{ customer | json }};
+
+        })();
+    </script>
+
+{# For (migrated) SCI, don't show shopify payment workflow if can_add_payment_method is True #}
+{% elif settings['has_shopify_connector'] and not customer.can_add_payment_method %}
+    {% include '_shopify_connector_payment_information_card.html' %}    
+{% elif not payment_sources or not payment_sources | selectattr("status", "equalto", "active") | list | length %}
+    {% if page and page == 'billing_page' %}
+    <h3>{{ 'cp_billing_header' | t }}</h3>
+    {% endif %}
+    <div class="rc-card mb-5 cursor-pointer">
+        <p>{{ 'cp_no_payment_source_on_file' | t }}</p>
+        <br>
+        
+        <button 
+            class="rc_btn--secondary rc_btn--secondary--color title-bold text-center js-edit-billing-card" 
+            style="display: inline-block;"
+        >{{ 'cp_add_card' | t }}</button>
+        <button
+            class="rc_btn--secondary rc_btn--secondary--color title-bold text-center" 
+            style="display: inline-block;"
+            data-add-billing-address
+            data-title="{{ 'cp_add_billing_address_label' | t }}"
+            onclick="addBillingAddressHandler(event)"
+        >{{ 'Add_Address' | t }}</button>
+    </div> 
+    
+    <!-- Include credit card form modal -->
+    {% include '_credit_card_form.html' %}
+
+    <script>
+        (function() {
+            ReCharge.Novum.payment_sources = {{ payment_sources | json }};
+            ReCharge.Novum.settings = {{ settings | json }};
+            ReCharge.Novum.customer = {{ customer | json }};
+        })();
+    </script>
+{% else %}
+    {% if page and page == 'billing_page' %}
+        <h3>{{ 'Billing_Information' | t }} </h3>
+    {% endif %}
+    
+    {% for payment_source in payment_sources %}
+        {% set payment_method = payment_source %}
+        <!-- Include billing adddress -->
+        {% include '_billing_address_card.html' %}
+        <!-- Include card on file -->
+        {% include '_card_on_file_card.html' %}
+        <!-- Include credit card form modal -->
+        {% include '_credit_card_form.html' %}
+    {% endfor %}
+    <script>
+        (function() {
+            ReCharge.Novum.payment_sources = {{ payment_sources | json }};
+            ReCharge.Novum.settings = {{ settings | json }};
+            ReCharge.Novum.customer = {{ customer | json }};
+        })();
+    </script>
+{% endif %}
+<script>
+    (function() {
+        const billingAddresses = document.querySelectorAll('.js-edit-billing-address')
+        const paymentInfos = document.querySelectorAll('.js-edit-billing-card')
+
+        billingAddresses.forEach(element => {
+            ReCharge.Utils.addAccessibleClickListener(element, (e) => renderBillingAddressHandler(e))
+        })
+        paymentInfos.forEach(element => {
+            ReCharge.Utils.addAccessibleClickListener(element, (e) => renderPaymentMethod(e))
+        })
+    })()
+</script>

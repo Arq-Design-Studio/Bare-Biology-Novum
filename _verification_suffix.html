@@ -1,0 +1,16 @@
+{% if settings.customer_portal.force_customer_portal_accounts and not is_theme_preview %}
+<div id="recharge_verification_suffix_wrap" style="display: none">
+    {# Verify customer access to page #}
+    {% raw %}
+        {% else %}
+            {% comment %}Customer match invalid{% endcomment %}
+            <script>
+                // if we're coming from rechargeapps, we're previewing a theme, skip validation (this code block is only accesible in production in the embedded portal, therefore not coming from rechargeapps.com)
+                if (!window.location.host.includes('.rechargeapps.com')) {
+                    window.location.href = '/account/login?checkout_url={% endraw %}{{ shopify_proxy_url }}{% raw %}/login';
+                }
+            </script>
+        {% endif %}
+    {% endraw %}
+</div>
+{% endif %}

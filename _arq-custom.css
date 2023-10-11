@@ -1,0 +1,849 @@
+/**
+ * Global overrides
+ */
+body#recharge-novum {
+  --primary-background: #ffffff;
+}
+#recharge-novum .header__backfill {
+    display: none !important;
+}
+/**
+ * Page layout
+ */
+.page-layout {
+  max-width: 78rem;
+  margin: 0 auto !important;
+  display: block;
+  gap: 1.5rem;
+  padding: 4.5rem 1.5rem !important;
+  align-items: flex-start;
+}
+
+.page-layout__aside {
+  flex-basis: 13rem;
+  position: sticky;
+  top: 0;
+}
+
+.page-layout__main {
+  width: 100%;
+}
+
+#recharge-novum .payment-methods-page, #recharge-novum #ShippingPage {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+@media only screen and (min-width: 650px) {
+  .page-layout {
+    display: flex;
+  }
+  
+  body#recharge-novum #recharge-te .rc_card_container {
+    display: block;
+  }
+}
+
+/**
+ * Navbar
+ */
+.nav__list--desktop a {
+  font-size: 1rem;
+  display: block;
+  padding-bottom: 24px !important;
+  text-transform: none;
+  font-weight: 500 !important;
+}
+
+.nav--wrapper .list__item {
+  border: 2px solid #000;
+  width: 100%;
+  padding: 1.25rem !important;
+  text-transform: none !important;
+}
+
+body#recharge-novum #recharge-te .nav__list--mobile li {
+  background: transparent !important;
+  font-size: 1rem !important;
+  text-transform: none !important;
+}
+
+body#recharge-novum #recharge-te .nav__list--mobile li a,
+body#recharge-novum #recharge-te .nav__list--mobile li a:hover {
+  color: #000 !important;
+}
+
+body#recharge-novum #recharge-te .nav__list--mobile li {
+  border-top: 0 !important;
+}
+
+/**
+ * Account banner
+ */
+
+.account-banner {
+  min-width: 100%;
+  aspect-ratio: 5/2;
+  position: relative;
+  color: #ffffff;
+}
+
+.account-banner__image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.account-banner__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.account-banner__content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-banner__title {
+  margin: 0;
+}
+
+@media only screen and (min-width: 750px) {
+  .account-banner {
+    aspect-ratio: 6/1;
+  }
+}
+
+/**
+ * Account nav
+ */
+
+.account-nav {
+  background-color: #F8F7F2;
+  color: #4C4646;
+}
+
+.account-nav__list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -ms-scroll-snap-type: x proximity;
+  scroll-snap-type: x proximity;
+}
+
+.account-nav__list::-webkit-scrollbar {
+  inline-size: 0 !important;
+  display: none;
+}
+
+.account-nav__item {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+}
+
+.account-nav__link {
+  display: block;
+  padding: 1.25rem 1.5rem !important;
+}
+
+.account-nav__link[aria-current="page"],
+body#recharge-novum #recharge-te ul li a, body#recharge-novum #recharge-te a:not(.rc-btn).account-nav__link[aria-current="page"] {
+  text-decoration-line: underline !important;
+  text-underline-offset: 0.25rem;
+  text-decoration-thickness: 0.0625rem !important;
+}
+
+@media only screen and (min-width: 750px) {
+  .account-nav__list {
+    justify-content: center;
+  }  
+
+  .account-nav__link {
+    padding: 1.25rem 2rem;
+  }
+}
+
+/**
+ * Subscription
+ */
+
+.subscription-edit-first-line {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+  width: 100%;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+}
+.go-back-subscription {width: 100%; flex-basis: 100%;}
+@media screen and(max-width: 1023px) {
+  flex-direction: column;
+  width: 100%;
+}
+.go-back-subscription {
+    width: 33%;
+  font-size:14px;
+  
+}
+
+.subscription-title {
+  margin: 0 0 !important;
+}
+
+.subscription-border-button {
+    background-color: transparent !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-color: black !important;
+    color: black !important;
+    font-size: 19px !important;
+    width: 150px !important;
+    font-family: 
+}
+
+.subscription-product-container {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+}
+
+.subscription-product-text{
+/* Desktop/Text XX-Small */
+
+font-family: 'Futura' !important;
+font-style: normal !important;
+font-weight: 450 !important;
+font-size: 14px !important;
+line-height: 171% !important;
+/* or 171% */
+
+letter-spacing: 1px !important;
+text-transform: uppercase !important;
+
+border-bottom-color: #E4E2E2 !important;
+border-bottom-style: solid !important;
+border-bottom-width: 1px !important;
+font-family: "AdobeCaslonItalic"!important;
+
+color: #4C4646;
+}
+
+.subscription-button {
+  font-family: "AdobeCaslonItalic" !important;
+  width: 101px !important;
+  height: 24px !important;
+  font-weight: 150 !important;
+  font-size: 20px !important;
+  line-height: 120% !important;
+  color: #4C4646  !important;
+  font-weight: 100 !important;
+  font-family: 'AdobeCaslonItalic';
+  padding: 0px;
+    width: 20% !important;
+  margin-right: 20px;
+  align-self: center !important;
+}
+}
+
+.subscription-button-container {
+     display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 63px !important;
+}
+
+.grid-2x2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100%;
+    gap: 10% 4%;
+    margin-bottom: 5%;
+}
+
+.grid-2x2 > * {
+  width: 100% !important;
+}
+
+body {
+  overflow-y: scroll !important;
+}
+
+#recharge-novum {
+    overflow-y: scroll !important;
+}
+
+.card-content {
+  width: 100%;
+}
+
+.new-edit {
+  justify-self: start;
+}
+
+.card-row {
+  display: flex;
+  flex-direction:row;
+}
+
+.card-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%
+}
+
+.alg-start {
+  align-self: start;
+}
+
+#rc_manage_subscription_container {
+color: var(--primary-color);
+}
+
+.text-body-2 {
+  color: var(--primary-color);
+}
+
+.rc_order_title2 {
+  font-family: var(--recharge-te-secondary-font) !important;
+    font-style: italic !important;
+    font-weight: 400 !important;
+    font-size: 20px !important;
+    line-height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    color: var(--color-dark-green) !important;
+}
+
+.rc_schedule_wrapper2 {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 168%;
+  color: #4C4646;
+  width:100%
+}
+
+.rc_subscription_prod_info--wrapper2 {
+  display: flex;
+  flex-direction: row;
+}
+
+#te-modal-content > #ReChargeForm_date > :last-child
+{
+  display: none !important
+}
+
+/* custom modals */
+
+#RechargeAddressForm > .address-fields > .rc-form-control > .rc-input {
+  border-color: #E4E2E2 !important;
+  color: #4C4646;
+  opacity: 1;
+}
+
+#RechargeAddressForm > .address-fields > .rc-form-control > .rc-input:focus {
+  border-color: #4C4646 !important;
+}
+
+
+#RechargeAddressForm > .address-fields > .rc-form-control > .rc-input::placeholder {
+  color: #827878 !important;
+  opacity: 1
+}
+
+#RechargeAddressForm > .address-fields > .rc-form-control > .rc-input::placeholder:focus {
+  color: #4C4646 !important;
+  opacity: 1;
+}
+
+
+#RechargeAddressForm > .address-fields > .h-stack > .rc-form-control > .rc-input {
+  border-color: #E4E2E2 !important;
+  color: #4C4646;
+  opacity: 1;
+}
+
+#RechargeAddressForm > .address-fields > .h-stack > .rc-form-control > .rc-input:focus {
+  border-color: #4C4646 !important;
+}
+
+
+#RechargeAddressForm > .address-fields > .h-stack > .rc-form-control > .rc-input::placeholder {
+  color: #827878 !important;
+  opacity: 1
+}
+
+#RechargeAddressForm > .address-fields > .h-stack > .rc-form-control > .rc-input::placeholder:focus {
+  color: #4C4646 !important;
+  opacity: 1;
+}
+
+#RechargeAddressForm > .address-fields > .rc-form-control > .rc-select {
+  border-color: #E4E2E2 !important;
+  color: #4C4646;
+  opacity: 1;
+  padding: 0 23px !important;
+  height: 52px !important;
+}
+
+#RechargeAddressForm > .address-fields  > .rc-form-control > .rc-select:focus {
+  border-color: #4C4646 !important;
+}
+
+#RechargeAddressForm > .address-fields > div > .rc-form-control > .rc-select {
+  border-color: #E4E2E2 !important;
+  color: #4C4646;
+  opacity: 1;
+  padding: 0 23px !important;
+  height: 52px !important;
+}
+
+#RechargeAddressForm > .address-fields  > div > .rc-form-control > .rc-select:focus {
+  border-color: #4C4646 !important;
+}
+
+#RechargeAddressForm > button.save-address.mb-0.rc-btn.rc-btn--primary {
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    color: #4C4646 !important;
+    border-color: #4C4646 !important;
+    border-style: solid !important;
+    border-width: 2px !important;
+    font-family: "AdobeCaslonItalic" !important;
+    font-style: italic !important;
+    text-transform: none !important;
+}
+
+#ReChargeForm_date  > button {
+     border-radius: 0 !important;
+    background-color: transparent !important;
+    color: #4C4646 !important;
+    border-color: #4C4646 !important;
+    border-style: solid !important;
+    border-width: 2px !important;
+    font-family: "AdobeCaslonItalic" !important;
+    font-style: italic !important;
+    text-transform: none !important;
+}
+
+#updateVariantForm > button {
+     border-radius: 0 !important;
+    background-color: transparent !important;
+    color: #4C4646 !important;
+    border-color: #827878 !important;
+    border-style: solid !important;
+    border-width: 2px !important;
+    font-family: "AdobeCaslonItalic" !important;
+    font-style: italic !important;
+    text-transform: none !important;
+}
+
+#updateVariantForm + a {
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    color: #4C4646 !important;
+    border-color: #827878!important;
+    border-style: solid !important;
+    border-width: 2px !important;
+    font-family: "AdobeCaslonItalic" !important;
+    font-style: italic !important;
+    text-transform: none !important;
+}
+
+#updateVariantForm > button:hover {
+    border-color: #4C4646 !important;
+}
+
+body#recharge-novum #recharge-te #updateVariantForm + a.rc_btn--secondary.text-uppercase.title-bold.text-center.rc_btn--secondary--color:hover {
+    border-color: #4C4646 !important;
+    background-color: transparent !important;
+}
+
+body#recharge-novum #recharge-te .rc_product_quantity {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    border: 1px solid #827878;
+    height: 64px;
+    border-radius: 0px;
+}
+
+body#recharge-novum #recharge-te #te-modal #variant_quantity {
+    background-color: transparent;
+    border: 2px solid transparent;
+}
+
+#updateVariantForm > .element__flex-column {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) repeat(3, 0fr);
+    grid-template-rows: repeat(2, 1fr) repeat(2, 0fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    height: 170px;
+}
+
+#updateVariantForm > .element__flex-column > *:nth-child(1) {
+  grid-area: 1 / 1 / 3 / 2 !important;
+  width: 150px !important;
+  height: auto !important;
+}
+
+
+#updateVariantForm > .element__flex-column > *:nth-child(1) > img {
+  object-fit: contain;
+  max-width: 80% !important;
+  min-width: 1px !important;
+  max-height: 200px !important;
+}
+
+#updateVariantForm > .element__flex-column > *:nth-child(2) {
+  grid-area: 1 / 2 / 2 / 3 !important;
+   font-weight: 400 !important;
+  font-size: 19px !important;
+  line-height: 168% !important;
+  color: #4C4646;
+  font-family: "AdobeCaslonItalic" !important;
+}
+
+
+#updateVariantForm > .element__flex-column > *:nth-child(3) {
+  grid-area: 2 / 2 / 3 / 3  !important;
+  font-style: bold !important;
+  font-weight: 800 !important;
+  font-size: 18px;
+  line-height: 111%;
+  color: #4C4646;
+}
+
+/* AJOM - Subscriptions.html(template) - _product_image.html (snnipet) ------------------------ */
+/* ============================================================================================ */
+body#recharge-novum #recharge-te .rc_photo_container.ajom-rc__product_image > img {
+  object-fit: initial !important;
+  max-height: 104px !important;
+  max-width: 82px !important;
+  min-width: initial !important;
+}
+
+body#recharge-novum #recharge-te .rc_photo_container.ajom-rc__product_image {
+  display: flex;
+  align-items: center
+}
+
+@media only screen and (min-width: 650px){
+  body#recharge-novum #recharge-te div.rc_subscription_prod_info--wrapper div.rc_photo_container.ajom-rc__product_image > img {
+  	max-height: 218px !important;
+  	max-width: 178px !important;
+    height: initial;
+  	width: initial;
+    object-fit: initial !important;
+  }
+}
+/* mobile version of subscription page */
+
+#rc_manage_subscription_container > div.rc-card.mb-5.cursor-pointer.js-edit-product.subscription-product-container > p {
+      padding-bottom: 10px;
+}
+
+  @media only screen and (max-width: 728px)
+  {
+    #rc_manage_subscription_container > div:nth-child(1) {
+      margin-bottom: 5vh !important;
+    }
+    
+    .subscription-edit-first-line div.column:nth-child(2) {
+      display: none;
+    }
+    
+    .page-layout__aside {
+      z-index: 1
+    }
+    
+    .rc_subscription_card_element_wrapper > .rc_button_wrapper {
+      text-align: center;
+    }
+    
+    .rc_subscription_prod_info--wrapper2 > .rc_shedule_wrapper_2 > .schedule_price_info {
+    margin-top: 15px !important;
+    margin-bottom: 10px !important;
+    }
+    
+    .grid-2x2 {
+      grid-template-columns: 1fr !important;
+      gap: 1% 4%;
+    }
+    
+.grid-2x2 > .rc_card_container > .d-flex.card-column> .color-light-green.margin-top-17 {
+      font-weight: 400 !important;
+      font-size: 20px !important;
+      line-height: 140% !important;
+      letter-spacing: 0.0075em !important;
+      color: #4C4646 !important;
+      font-size: 20px !important;
+      margin-right: 80%;
+    }
+}
+
+/* AJOM - Subscription.html(template) - Mobile version ------------------------ */
+/* ============================================================================ */
+/*Note: style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"*/domain
+#ajom-rc-mobile__buttons{
+  display: flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+}
+
+#ajom-rc-mobile__buttons p {
+  font-family: var(---font-stack-body) !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  line-height: 24px !important;
+  margin-bottom: 22px !important;
+}
+
+#ajom-rc-mobile__buttons button {
+  display: flex !important;
+  font-family: var(---font-stack-body) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 21px !important;
+  letter-spacing: 0.75px !important;
+  padding-left: 0 !important;
+  margin-bottom: 5px !important;
+}
+
+@media only screen and (min-width: 768px) {
+  #ajom-rc-mobile__buttons{
+    display: none !important;
+  }
+}
+
+/* subscription cancel button */
+
+
+
+.rc_discount_container {
+  width: 48%
+}
+
+.rc_discount__code {
+  font-family: var(--recharge-te-primary-font) !important;
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.rc_discount__value {
+    font-family: var(--recharge-te-primary-font) !important;
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.rc_discount {
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 769px) {
+.rc_discount_container {
+  width: 100%
+  }
+}
+
+body#recharge-novum #recharge-te .rc_product_list_container .product-title {
+    font-family: var(--recharge-te-secondary-font);
+    font-style: italic;
+    font-size: 16px !important;
+    font-weight: 100 !important;
+  height: auto !important;
+}
+
+.recharge-price-two {
+  font-size: 16px;
+}
+
+/* buttom branding */
+
+.bbrc-btn {
+  font-family: "AdobeCaslonItalic" !important;
+  border-color: #4C4646 !important;
+  border-style: solid !important;
+  border-width: 2px !important;
+  color: #4C4646 !important;
+  background-color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  cursor: pointer;
+}
+
+
+.bbrc-btn:hover {
+  border-color: #a89c9c !important;
+   background-color: transparent !important;
+}
+
+.bbrc-btn:focus {
+  background-color: #4C4646 !important;
+  color: white !important;
+}
+
+.bbrc-btn:active {
+  background-color:#282424 !important;
+  border-color:#282424 !important;
+  color: white !important;
+}
+
+.bbrc-btn:disabled {
+  border-color: #a89c9c !important;
+  color: #a89c9c !important
+  background-color: transparent !important;
+}
+
+/* bbrc that do not overwrite display */
+
+.bbrc-btn_d {
+  font-family: "AdobeCaslonItalic" !important;
+  border-color: #4C4646 !important;
+  border-style: solid !important;
+  border-width: 2px !important;
+  color: #4C4646 !important;
+  background-color: transparent !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  cursor: pointer;
+}
+
+
+.bbrc-btn_d:hover {
+  border-color: #a89c9c !important;
+   background-color: transparent !important;
+}
+
+.bbrc-btn_d:focus {
+  background-color: #4C4646 !important;
+  color: white !important;
+}
+
+.bbrc-btn_d:active {
+  background-color:#282424 !important;
+  border-color:#282424 !important;
+  color: white !important;
+}
+
+.bbrc-btn_d:disabled {
+  border-color: #a89c9c !important;
+  color: #a89c9c !important
+  background-color: transparent !important;
+}
+
+.bbrc-edit {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.body#recharge-novum #recharge-te #te-modal .upsell-text-clip, body#recharge-novum #recharge-te #rc_te-template-wrapper .upsell_text--clip {
+  height: auto;
+}
+
+ #ajom-rc-mobile__buttons  button.bbrc-btn2 {
+  height: 50px !important;
+  margin-bottom: 30px !important;
+    font-family: var(--recharge-te-secondary-font) !important;
+   font-weight: 400 !important;
+   font-size: 19px !important;
+   line-height: 32px !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .rc_upsells-btns input[type=button].title-bold {
+  font-family: "AdobeCaslonItalic" !important;
+  border-color: #4C4646 !important;
+  border-style: solid !important;
+  border-width: 2px !important;
+  color: #4C4646 !important;
+  background-color: #F0EDE4CC !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  cursor: pointer;
+  border-radius: 0px !important
+  opacity: 1;
+  border-radius: 0px !important;
+}
+
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .rc_upsells-btns input[type=button].title-bold:hover {
+  border-color: #a89c9c !important;
+   background-color: transparent !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .rc_upsells-btns input[type=button].title-bold:focus {
+  background-color: #4C4646 !important;
+  color: white !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .rc_upsells-btns input[type=button].title-bold:active {
+  background-color:#282424 !important;
+  border-color:#282424 !important;
+  color: white !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .rc_upsells-btns input[type=button].title-bold:disabled {
+  border-color: #a89c9c !important;
+  color: #a89c9c !important
+  background-color: transparent !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li p.rc_upsells-btns {
+  background-color: white !important;
+  opacity 0.9;
+}
+
+#te-modal-content > h4 {
+    font-family: 'Futura' !important;
+    line-height: 140% !important;
+    font-weight: 400 !important;
+    color: rgb(70 60 60) !important;
+}
+
+.old-sub-warning {
+    display: grid !important;
+    grid-template-columns: 20% 80% !important;
+    background-color: #fff4df !important;
+    padding: 10px !important;
+    color: #d56c41 !important;
+}
+
+.custom-triangle-size {
+     margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 150% !important;
+}
+
+.rc_purchase_type.border-light.margin-top-10 > input, .rc_purchase_type.border-light.margin-top-10 > label {
+ margin: auto !important; 
+}
+
+/* button layout */
+@media (max-width: 728px) {
+  .rc_discount {
+    display: flex;
+    flex-direction: column;
+  }
+}

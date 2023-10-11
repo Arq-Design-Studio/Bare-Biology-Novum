@@ -1,0 +1,10 @@
+<h4 class="text-center"> 
+    {% if settings.customer_portal.subscription.cancellation_reason_optional %}
+    {{ 'select_a_reason_for_cancelling_optional' | t }}
+    {% else %}
+    {{ 'select_a_reason_for_cancelling' | t }}
+    {% endif %}
+</h4>
+
+<ul id="rc_cancellation_reasons_list">
+</ul>

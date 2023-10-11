@@ -1,0 +1,24 @@
+<div
+    class="rc-card mb-5 rc_card_container rc_discount_container"
+    style="display: none"
+>
+  <div class="card-content text-body-2 card-row heading-and-edit border-btm d-flex justify-space-between">
+             
+    <p class="title-bold text-uppercase rc_card_title">
+        {{ 'cp_discount_applied' | t }}
+    </p>
+             
+    
+             <button
+             onclick="removeDiscountHandler(event);"
+             data-title="Remove Discount"
+             data-id="{{ subscription.address_id }}"
+             class=" rc_btn--link w-unset mb-0 new-edit js-delete-discount-btn"
+         >Remove Code </button>
+    
+             </div>
+    <div class="rc_discount">
+        <span class="rc_discount__code"></span>
+        <span class="rc_discount__value"></span>
+    </div>
+</div>

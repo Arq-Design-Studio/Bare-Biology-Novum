@@ -1,0 +1,385 @@
+
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+    (function() {
+        ReCharge.Novum.customer = {{ customer | json }};
+        ReCharge.Novum.payment_sources = {{ payment_sources | json }};
+        ReCharge.Novum.payment_methods = {{ payment_methods | json }};
+        ReCharge.Novum.addresses = {{ addresses | json }};
+        ReCharge.Novum.subscription = {{ subscription | json }};
+        ReCharge.Novum.store = {{ store | json }};
+        ReCharge.Novum.settings = {{ settings | json }};
+        // Remove old countries in case it still exists
+        sessionStorage.removeItem('rc_shipping_countries');
+        // Used by the country/province select utils
+        sessionStorage.setItem('rc_shipping_countries', JSON.stringify({{ shipping_countries | json }}));
+    })();
+</script>
+
+<section id="rc_manage_subscription_container">
+  
+  <div>
+    <a href="{{ subscription_list_url }}" class="rc_btn--link subscription-button subscription-button-container go-back-subscription"><i class="fas fa-angle-double-left"></i> {{ 'Back_To_Subscriptions_List' | t }} </a>
+  </div>
+    <div class="subscription-edit-first-line is-flex-row justify-space-between"> 
+           
+    	<div class="column">
+            <h3 class="margin-top-15 subscription-title">
+            {%
+                if subscription.status == "ACTIVE" or
+                subscription.status == "CANCELLED" or
+                subscription.status == "EXPIRED"
+    
+            %}
+                {{ 'cp_your_subscription' | t }}
+            {%
+                elif subscription.status == "ONETIME" and
+                subscription.properties | selectattr("name", "equalto", "add_on") | list | length
+            %}
+                {{ 'cp_your_add_on_product' | t }}
+            {% else %}
+                {{ 'cp_your_onetime_product' | t }}
+            {% endif %}
+            </h3>
+      </div>
+      <div class="column is-flex-row is-justify-space-between" style="gap: 20px;">
+        <!-- Skip button -->
+        {% if subscription.status == "ACTIVE" and subscription.charge_interval_frequency == subscription.order_interval_frequency %}
+        
+            <button
+                class="rc_btn--link js-skip-btn js-skip-handler subscription-button subscription-button-container"
+                data-id="{{ subscription.id }}"
+                data-date="{{ subscription.next_charge_scheduled_at }}"
+                data-current-date="{{ subscription.next_charge_scheduled_at | date('%B %d') }}"
+                data-unit="{{ subscription.order_interval_unit}}"
+                data-frequency="{{ subscription.order_interval_frequency}}"
+                data-type="skip shipment"
+                data-address-id="{{ subscription.address_id }}"
+            > {{ 'cp_skip_shipment' | t }} </button>
+        
+        {% endif %}
+        <!-- Cancel button -->
+     {% if subscription.status == "ACTIVE" %}
+     <button
+         id ="primarycancelbutton"
+         data-title="{{ 'cp_cancel_cancel_title' | t }}"
+         data-id="{{ subscription.id }}"
+         data-address-id="{{ subscription.address_id }}"
+         data-unit="{{ subscription.order_interval_unit }}"
+         class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-sub-btn subscription-button subscription-button-container" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+     > Cancel </button>
+ {% elif subscription.status == "ONETIME" and subscription.properties | length > 0 %}
+     {% for prop in subscription.properties %}
+         {% if prop.name == "add_on" %}
+             <button
+                 class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-otp-btn subscription-button subscription-button-container" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+                 data-onetime-id="{{ subscription.id }}"
+                 onclick="deleteOnetime(event); return false;"
+                 data-add-on=true
+             > {{ 'cp_delete_product' | t }} </button>
+         {% break %}
+         {% elif loop.index == loop.length %}
+             <button
+                 class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-otp-btn subscription-button subscription-button-container" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+                 data-onetime-id="{{ subscription.id }}"
+                 onclick="deleteOnetime(event); return false;"
+                 data-add-on=false
+             > {{ 'cp_remove_product' | t }} </button>
+         {% endif %}
+     {% endfor %}
+ {% elif subscription.status == "ONETIME" %}
+     <button
+         class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-otp-btn subscription-button subscription-button-container" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+         data-onetime-id="{{ subscription.id }}"
+         onclick="deleteOnetime(event); return false;"
+         data-add-on=false
+     > {{ 'cp_remove_product' | t }} </button>
+ {% endif %}
+
+            {% if payment_sources[0].status == "active" %}
+            {% if settings.customer_portal.subscription.edit_scheduled_date %}
+                
+                    {% if subscription.status == "ACTIVE" and subscription.next_charge_scheduled_at %}
+                        <button
+                            class="rc_btn text-uppercase title-bold rc_btn rc_btn--primary bbrc-btn" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic';"
+                            onclick="shipNowHandler(event, '{{ subscription.id }}', '{{ subscription.next_charge_scheduled_at }}', 'true')"
+                        > {{ 'cp_order_now_button' | t }} </button>
+                    {% elif subscription.status == "ONETIME" and subscription.properties | length > 0 %}
+                        {% for prop in subscription.properties %}
+                            {% if prop.name == "add_on" %}
+                            {% elif loop.index == loop.length %}
+                                <button
+                                    class="rc_btn text-uppercase title-bold rc_btn rc_btn--primary bbrc-btn"
+                                    onclick="shipNowHandler(event, '{{ subscription.id }}', '{{ subscription.next_charge_scheduled_at }}', 'true')"
+                                > {{ 'cp_order_now_button' | t }} </button>
+                            {% endif %}
+                        {% endfor %}
+                    {% elif subscription.status == "ONETIME" and subscription.properties | length == 0 %}
+                        <button
+                            class="rc_btn text-uppercase title-bold rc_btn rc_btn--primary bbrc-btn"
+                            onclick="shipNowHandler(event, '{{ subscription.id }}', '{{ subscription.next_charge_scheduled_at }}', 'true')"
+                        > {{ 'cp_order_now_button' | t }} </button>
+                    {% endif %}
+                
+            {% endif %}
+        {% else %}
+        {% endif %}
+        </div>
+    </div>
+        <!-- Product details -->
+        <div class="rc-card mb-5 cursor-pointer js-edit-product subscription-product-container" aria-label="Edit {{ 'Product' | t }}">
+            <p class="title-bold text-uppercase color-dark-green subscription-product-text" >{{ 'Product' | t }}</p>
+
+            <div class="rc_subscription_card_element_wrapper rc_subscription_container rc_active_subscriptions">
+                <div class="rc_subscription_info_container">
+                    <div class="rc_subscription_prod_info--wrapper2">
+                        <div class="custom_photo_container1">
+                            {% include '_product_image.html' %}
+                        </div>
+                        <div class="rc_schedule_wrapper rc_shedule_wrapper_2">
+                            <h5 class="rc_order_title2">{{ subscription.product_title | replace('Auto renew', '') }}</h5>
+                            {% if subscription.variant_title %}
+                                <p class="schedule_meta_info">{{ subscription.variant_title }}</p>
+                            {% endif %}
+                            <p class="schedule_meta_info">{{ 'Quantity' | t }}: {{ subscription.quantity }}</p>
+                            <p class="schedule_price_info">{{ subscription.price | money_localized }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rc_button_wrapper">
+                <button class="rc_btn--link w-unset mb-0 new-edit">Edit Product</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discount card  -->
+        {% if subscription.address.discount_id and subscription.status == "ACTIVE" %}
+            {% include '_discount_card.html' %}
+        {% endif %}
+
+         <!-- Action buttons -->
+    <div class="grid-2x2">
+        <div
+         class="rc_card_container rc-card mb-5 cursor-pointer js-edit-next-charge-date"
+         data-date="{{ subscription.next_charge_scheduled_at }}"
+         data-subscription-id="{{ subscription.id }}"
+         data-status="{{ subscription.status}}">
+         <div class="d-flex justify-space-between align-items-center card-column">
+            <div class="card-content text-body-2 card-row heading-and-edit border-btm d-flex justify-space-between">
+             {% if subscription.charge_interval_frequency != subscription.order_interval_frequency %}
+                 <p class="title-bold text-uppercase color-dark-green">{{ 'next_charge' | t }}</p>
+             {% else %}
+                 <p class="title-bold text-uppercase color-dark-green">{{ 'next_charge_date' | t }}</p>
+             {% endif %}
+             <button class="rc_btn--link w-unset mb-0 new-edit js-edit-next-charge-date-btn" style="display: none;">Edit</button>
+             </div>
+
+             {% if subscription.next_charge_scheduled_at %}
+                 <h3 class="color-light-green margin-top-17">
+                     {% set next_charge_date = subscription.next_charge_scheduled_at | date('%B %d') | downcase %}
+                     {% include '_translated_month.html' %}
+                 </h3>
+             {% else %}
+                 <h3 class="color-dark-green margin-top-17">{{ 'cp_next_shipment_no_date' | t }}</h3>
+             {% endif %}
+         </div>
+    </div>
+    <!-- Deliver every -->
+    {% if subscription.status == "ACTIVE" %}
+    <div
+        class="rc_card_container rc-card mb-5 cursor-pointer js-edit-frequency"
+        id="delivery_container"
+        data-id="{{ subscription.id }}"
+        style="{{ 'pointer-events: auto;' if (subscription.product and subscription.product.subscription_defaults and subscription.product.subscription_defaults.order_interval_frequency_options | length > 1 and subscription.order_interval_frequency == subscription.charge_interval_frequency) or
+        (settings.customer_portal.subscription.edit_order_frequency == 'Any' and subscription.order_interval_frequency == subscription.charge_interval_frequency) else 'pointer-events: none;'}}"
+        aria-label="{{ 'delivery_schedule_label' | t }}"
+    >
+        <div class="d-flex justify-space-between align-items-center card-column">
+        <div class="card-content text-body-2 card-row heading-and-edit border-btm d-flex justify-space-between">
+            <p class="title-bold text-uppercase color-dark-green">{{ 'delivery_schedule_label' | t }}</p>
+            <button class="rc_btn--link w-unset mb-0 new-edit js-edit-frequency-btn" style="display: none;">Edit</button>
+            </div>
+            <h3 class="color-light-green margin-top-17">
+                {{ subscription.order_interval_frequency }}
+                {% set order_interval_unit = subscription.order_interval_unit %}
+                {% set frequency = subscription.order_interval_frequency %}
+                {% include '_translated_order_interval_unit.html' %}
+            </h3>
+        </div>
+        {% if
+            (subscription.product and subscription.product.subscription_defaults and subscription.product.subscription_defaults.order_interval_frequency_options | length > 1 and subscription.order_interval_frequency == subscription.charge_interval_frequency) or
+            (settings.customer_portal.subscription.edit_order_frequency == "Any" and subscription.order_interval_frequency == subscription.charge_interval_frequency)
+        %}
+        {% endif %}
+        </div>
+    {% endif %}
+
+        
+
+     {% include '_subscription-shipping-address.html' %}
+     {% if useMultiplePaymentMethods %}
+     {% include '_subscription-payment-method.html' %}
+     {% endif %}
+    </div>
+
+     <br>
+     <!-- Discount button -->
+     {% if subscription.status not in ["CANCELLED", "EXPIRED"]
+         and not subscription.address.discount_id
+         and settings.customer_portal.discount_input
+     %}
+         <button
+             style="margin-left: auto; margin-right: auto; display: block;"
+             onclick="addDiscountHandler(event);"
+             data-title="{{ 'cp_add_discount_label' | t }}"
+             data-id="{{ subscription.address_id }}"
+             class="rc_btn--link js-add-discount-btn text-uppercase text-center"
+         > {{ 'Apply_discount' | t }} </button>
+     {% endif %}
+
+     <div class="right-content">
+        <!-- div used by rebundle to inject their app -->
+        <div id="bundling-app" class="bundling-app"></div>
+       <!-- Edit buttons mobile -->
+       <div id="ajom-rc-mobile__buttons">
+       <br>
+         <div style="margin-bottom: 0px; padding: 0px 0px; height: 33px; margin-bottom: 20px; padding-bottom: 40px;"
+              class="heading-and-edit border-btm d-flex justify-space-between">
+      <span class="rc-subheading" style="font-size: 16px !important; letter-spacing: 1px;">EDIT SUBSCRIPTIONS</span>
+           </div>
+        <!-- Skip button -->
+        {% if subscription.status == "ACTIVE" and subscription.charge_interval_frequency == subscription.order_interval_frequency %}
+        
+            <button
+                class="js-skip-btn js-skip-handler rc_btn rc_btn--primary bbrc-btn bbrc-btn2"
+                data-id="{{ subscription.id }}"
+                data-date="{{ subscription.next_charge_scheduled_at }}"
+                data-current-date="{{ subscription.next_charge_scheduled_at | date('%B %d') }}"
+                data-unit="{{ subscription.order_interval_unit}}"
+                data-frequency="{{ subscription.order_interval_frequency}}"
+                data-type="skip" style="display: none;"
+                data-address-id="{{ subscription.address_id }}"
+            >Skip delivery</button>
+        
+        {% endif %}
+        <!-- Cancel button -->
+     {% if subscription.status == "ACTIVE" %}
+     <button id="secondaryButton"  class="rc_btn rc_btn--primary bbrc-btn bbrc-btn2"
+       onclick="document.getElementById('primarycancelbutton').click()" > Cancel </button>
+ {% elif subscription.status == "ONETIME" and subscription.properties | length > 0 %}
+     {% for prop in subscription.properties %}
+         {% if prop.name == "add_on" %}
+             <button
+                 class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-otp-btn subscription-button subscription-button-container rc_btn rc_btn--primary bbrc-btn bbrc-btn2" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+                 data-onetime-id="{{ subscription.id }}"
+                 onclick="deleteOnetime(event); return false;"
+                 data-add-on=true
+             > {{ 'cp_delete_product' | t }} </button>
+         {% break %}
+         {% elif loop.index == loop.length %}
+             <button
+                 class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-otp-btn subscription-button subscription-button-container rc_btn rc_btn--primary bbrc-btn bbrc-btn2" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+                 data-onetime-id="{{ subscription.id }}"
+                 onclick="deleteOnetime(event); return false;"
+                 data-add-on=false
+             > {{ 'cp_remove_product' | t }} </button>
+         {% endif %}
+     {% endfor %}
+ {% elif subscription.status == "ONETIME" %}
+     <button
+         class="rc_cancel-btn rc_btn--link text-uppercase text-center js-cancel-otp-btn subscription-button subscription-button-container rc_btn rc_btn--primary bbrc-btn bbrc-btn2" style="font-weight: 100 !important; font-family:'AdobeCaslonItalic'; text-transform: capitalize;"
+         data-onetime-id="{{ subscription.id }}"
+         onclick="deleteOnetime(event); return false;"
+         data-add-on=false
+     > {{ 'cp_remove_product' | t }} </button>
+ {% endif %}
+
+            {% if payment_sources[0].status == "active" %}
+            {% if settings.customer_portal.subscription.edit_scheduled_date %}
+                
+                    {% if subscription.status == "ACTIVE" and subscription.next_charge_scheduled_at %}
+                        <button class="rc_btn rc_btn--primary bbrc-btn bbrc-btn2" 
+                            onclick="shipNowHandler(event, '{{ subscription.id }}', '{{ subscription.next_charge_scheduled_at }}', 'true')"
+                        > {{ 'cp_order_now_button' | t }} </button>
+                    {% elif subscription.status == "ONETIME" and subscription.properties | length > 0 %}
+                        {% for prop in subscription.properties %}
+                            {% if prop.name == "add_on" %}
+                            {% elif loop.index == loop.length %}
+                                <button class="rc_btn rc_btn--primary bbrc-btn bbrc-btn2"
+                                    onclick="shipNowHandler(event, '{{ subscription.id }}', '{{ subscription.next_charge_scheduled_at }}', 'true')"
+                                > {{ 'cp_order_now_button' | t }} </button>
+                            {% endif %}
+                        {% endfor %}
+                    {% elif subscription.status == "ONETIME" and subscription.properties | length == 0 %}
+                        <button class="rc_btn rc_btn--primary bbrc-btn bbrc-btn2" 
+                            onclick="shipNowHandler(event, '{{ subscription.id }}', '{{ subscription.next_charge_scheduled_at }}', 'true')"
+                        > {{ 'cp_order_now_button' | t }} </button>
+                    {% endif %}
+                
+            {% endif %}
+        {% else %}
+        {% endif %}
+         <br>
+        </div>
+       <div class="upsells--wrapper">
+            <h2>{{ 'cp_try_something_new' | t }}</h2>
+            <div>{{ 'cp_add_product_to_next_package' | t }}</div>
+    
+            <div class="rc_loader text-center" id="upsells--loader"> </div>
+    
+            <ul id="rc__upsells--container" aria-live="polite"> </ul>
+    
+            {% include '_pagination.html' %}
+        </div>
+    </div>
+ </div>
+
+<div class="important-open-div"><div/>
+</section>
+
+<script>
+    (function() {
+        const editProductCard = document.querySelector('.js-edit-product');
+
+        ReCharge.Utils.addAccessibleClickListener(editProductCard, (e) => editProduct(e));
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            ReCharge.Novum.Helpers.fetchChargesOnetimes();
+            // Check if store allows subscription cancellation
+            ReCharge.Utils.checkIfStoreAllowsCancellation();
+
+            const upsellWrapper = document.querySelector(".upsells--wrapper") || null;
+
+            if (ReCharge.Novum.settings.customer_portal.subscription.add_product) {
+                const schema = ReCharge.Schemas.products.list(12, `upsell_product`);
+                const data =  await ReCharge.Actions.getProducts(12, schema);
+
+                ReCharge.Novum.Pagination.type = 'upsell';
+                ReCharge.Novum.Pagination.updateBtnProps('container');
+                ReCharge.Novum.Pagination.updateBtnProps('prev');
+                ReCharge.Novum.Pagination.updateBtnProps('next');
+                ReCharge.Novum.Pagination.updateBtnProps('current');
+
+                if (data.products && data.products.length) {
+                    ReCharge.Novum.Helpers.renderUpsells(data.products);
+                } else {
+                    upsellWrapper.innerHTML = ReCharge.Utils.renderErrorFetchingProductsLayout();
+                }
+            } else {
+                upsellWrapper.innerHTML = ReCharge.Utils.renderNoProductsLayout();
+            }
+        });
+    })();
+
+    {% if store.bundles_enabled %}
+        {% include '_bundling.js' %}
+    {% endif %}
+
+    {% include '_subscription.js' %}
+</script>
+
+{% endblock %}

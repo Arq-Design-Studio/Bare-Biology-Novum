@@ -1,0 +1,790 @@
+<div
+    class="subscription-shipping-address rc-card"
+    aria-label="{{ 'cp_shipping_address_header' | t }}"
+>
+    <div class="d-flex justify-space-between align-items-center text-body-2">
+        <div class="card-content">
+          	<div class="heading-and-edit border-btm d-flex justify-space-between">
+              <h4 class="rc-subheading">{{ 'cp_shipping_address_header' | t }}</h4>
+              <button type="button" class="rc_btn--link w-unset mb-0 js-edit-shipping-address">Edit</button>
+          	</div>
+            <div class="mt-3" data-shipping-address></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const {
+            translations,
+            Novum: { settings },
+            Utils: { addAccessibleClickListener },
+            Components: {
+                render,
+                renderPaymentMethodDetails,
+                createPaymentMethodDetails,
+                renderAddress,
+                createSpinner,
+                createRadio,
+                createAddress,
+                createAssociatedSubscriptions,
+                createAssociatedOTPs,
+                translatePaymentMethod,
+            },
+            Toast,
+            Drawer,
+            Forms,
+            Api,
+            formUtils: { getAddressFormValues },
+        } = ReCharge;
+
+        let state = {
+            addresses: ReCharge.Novum.addresses,
+            paymentMethods: [],
+        };
+
+        const AssociatedSubscriptionsAlert = (numOfSubs) => {
+            if (!numOfSubs) {
+                return '';
+            }
+
+            const subsText =
+                numOfSubs === 1
+                    ? translations.shipping.associatedSubscriptionsSingular
+                    : translations.shipping.associatedSubscriptionsPlural;
+
+            return `
+                <div data-associated-subs class="rc-subtext text-center mb-5">${subsText.replace(
+                    "{numOfSubs}",
+                    numOfSubs
+                )}</div>
+            `;
+        }
+        const AssociatedSubscriptionsList = (associatedSubscriptions) => {
+            if (!associatedSubscriptions.length) {
+                return '';
+            }
+
+            return `
+                <h4 class="rc-subheading mt-7 mb-2">Other associated subscriptions</h4>
+                ${createAssociatedSubscriptions(
+                    associatedSubscriptions,
+                    {
+                        associatedSubsHeader: '',
+                    }
+                )}
+            `;
+        }
+        
+        const AssociatedOTPsList = (associatedOTPs) => {
+            if (!associatedOTPs.length) {
+                return '';
+            }
+
+            return `
+                <h4 class="rc-subheading mt-7 mb-2">Other associated one-time products</h4>
+                ${createAssociatedOTPs(
+                    associatedOTPs,
+                    {
+                        associatedOTPsHeader: '',
+                    }
+                )}
+            `;
+        }
+
+        function renderShippingAddress(address) {
+            const shippingAddressEl = document.querySelector(
+                "[data-shipping-address]"
+            );
+            renderAddress(address, shippingAddressEl);
+
+            // Render the payment method as well in case it changes
+            const paymentMethod = address?.include?.payment_methods[0];
+
+            if (!paymentMethod) return;
+
+            const paymentMethodEl = document.querySelector(
+                "[data-payment-method]"
+            );
+
+            if (paymentMethodEl) {
+                if (paymentMethod) {
+                    renderPaymentMethodDetails(paymentMethod, paymentMethodEl);
+                } else {
+                    paymentMethodEl.innerHTML = `
+                        <div class="text-body-2 d-flex align-items-center">
+                            <svg class="mr-2" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0.5C3.86 0.5 0.5 3.86 0.5 8C0.5 12.14 3.86 15.5 8 15.5C12.14 15.5 15.5 12.14 15.5 8C15.5 3.86 12.14 0.5 8 0.5ZM8.75 11.75H7.25V10.25H8.75V11.75ZM8.75 8.75H7.25V4.25H8.75V8.75Z" fill="#EC3D10"/>
+                            </svg>
+                            <span>${translations.subscription.noPaymentMethod}</span>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Fetches the addreses and updates the global state
+        async function fetchAddresses() {
+            try {
+                // Fetch and store the addresses for use later
+                state.addresses = (await Api.getShippingAddresses({
+                    includeSubscriptions: true,
+                })).data.addresses;
+            } catch (e) {
+                // If fetch fails for some reason, just fall back to the current address
+                state.addresses = [ReCharge.Novum.subscription.address];
+            }
+            return state.addresses;
+        }
+
+        // Fetches the addreses and updates the global state
+        async function fetchPaymentMethods() {
+            try {
+                // Fetch and store the addresses for use later
+                state.paymentMethods = (await Api.getPaymentMethods()).data.payment_methods;
+            } catch (e) {
+                // If fetch fails for some reason, assume we have none
+            }
+            return state.paymentMethods;
+        }
+
+        // Handle address errors
+        function handleError(error) {
+            const errorMessage =
+                error.response?.data?.error?.errors?.all ||
+                error.response?.data?.error?.errors?.province ||
+                error.response?.data?.error?.errors?.shipping_country ||
+                `{{ "cp_something_went_wrong" | t }}`;
+            ReCharge.Toast.addToast(`{{ 'cp_toast_error' | t }}`, errorMessage);
+        }
+
+        // Will save or create the address based on the passed in address
+        async function saveAddress(address) {
+            const addressPromise = address.id
+                ? ReCharge.Api.updateShippingAddress
+                : ReCharge.Api.createShippingAddress;
+            return (await addressPromise(address)).data.address;
+        }
+
+        // Updates the subscription address or all the subscription addresses
+        async function updateSubscriptionAddress(address, all) {
+            try {
+                // prevent Drawer from being closed during request
+                window.locked = true;
+                const { subscription } = ReCharge.Novum;
+                let currentAddress = subscription.address;
+                const activeSubsAtAddress = subscription.address.subscriptions.filter((sub) => sub.status !== "CANCELLED");
+                const orderDate = subscription.next_charge_scheduled_at;
+                const subscriptions = all
+                    ? subscription.address.subscriptions
+                    : [subscription];
+                const numOfSubs = subscriptions.length;
+              const activeSubscriptions = subscriptions.filter((sub) => sub.status !== "CANCELLED");
+                const numOfActiveSubs = activeSubscriptions.length;
+                const OTPs = subscription?.address?.onetimes;
+                // get only the OTPs for this address that are associated with the current order
+                const orderOTPs = currentAddress.onetimes.filter(
+                    (otp) => (otp.next_charge_scheduled_at === orderDate)
+                );
+                const numOfOTPS = orderOTPs.length;
+                if (numOfOTPS && (subscription.status === "ACTIVE" || subscription.status === "ONETIME") && all !== undefined) {
+                    activeSubscriptions.push(...orderOTPs)
+                }
+
+              
+                const [submitBtn, otherBtn] =
+                    document.forms.RechargeMoveSubsForm.querySelectorAll(
+                        "button"
+                    );
+
+                // Toggle the other button to be disabled for this request
+                otherBtn?.toggleAttribute("disabled");
+
+                await Api.submitRequest(
+                    async () => {
+                        {% if useMultiplePaymentMethods %}
+                        const addressPaymentMethodId = subscription.address.include.payment_methods[0].id;
+                        {% else %}
+                        const addressPaymentMethodId = ReCharge.Novum.payment_methods[0].id;
+                        {% endif %}
+                        // If this address doesnt have a payment method, use the current one
+                        if (!address?.include?.payment_methods[0]) {
+                            await saveAddress({
+                                id: address.id,
+                                payment_method_id: addressPaymentMethodId,
+                            });
+                        }
+                        const updatedSubs = await Promise.all(
+                            activeSubscriptions.map((sub) =>
+                                Api.createUpdateSubscriptionAddress(sub.id, address)
+                            )
+                        );
+                         
+                        await fetchAddresses();
+                        const updatedSub = updatedSubs.find(
+                            ({ subscription: updatedSub }) =>
+                                updatedSub.id === subscription.id
+                        );
+                        const updatedAddress = state.addresses.find(
+                            (addr) => addr.id === updatedSub.address.id
+                        );
+                        ReCharge.Novum.subscription = {
+                            ...updatedSub.subscription,
+                            address: updatedAddress,
+                        };
+                        renderShippingAddress(updatedAddress);
+                    },
+                    {
+                        key: "updateSubscriptionAddress",
+                        submitButton: submitBtn,
+                        stayDisabled: true,
+                        successMessage:
+                            numOfActiveSubs > 1
+                                ? translations.subscription.address.successAll.replace(
+                                      "{numOfSubs}",
+                                    activeSubscriptions.length
+                                  )
+                                : translations.subscription.address.success,
+                    }
+                );
+                Drawer.close({unlockWindow: true});
+            } catch (e) {
+                otherBtn?.toggleAttribute("disabled");
+                console.error(e);
+            } finally {
+                delete window.locked;
+            }
+        }
+
+        /* Renders the first step. Will either be edit or address selection based on how many addresses */
+        function renderFirstStep() {
+            const { addresses } = state;
+            if (addresses.length === 1) {
+                // Get the first address since we only have one
+                renderEditAddress(addresses[0]);
+            } else {
+                renderAddressSelection();
+            }
+        }
+
+        function renderNoPaymentMethods() {
+            const canAddPaymentMethod =
+                ReCharge.Novum.customer.can_add_payment_method;
+            const { domain } = window.ReCharge.Novum.store;
+
+            Drawer.open({
+                header: translations.subscription.address.header,
+                content: `
+                    ${
+                        canAddPaymentMethod
+                            ? `<div class="empty text-center text-body-2">
+                                    <div class="text-center mb-5">${translations.subscription.address.noPaymentMethod.notSci}</div>
+                                    <a class="add-payment-method rc-btn rc-btn--primary w-100" href="{{payment_methods_url}}&add=true">${translations.paymentMethods.addBtn}</a>
+                                </div>`
+                            : `
+                                <div class="empty text-center text-body-2">
+                                    <div class="text-center mb-5">${translations.subscription.address.noPaymentMethod.sci}</div>
+                                    <a class="rc-btn rc-btn--primary w-100" href="https://${domain}" target="_blank">${translations.paymentMethods.newSubscriptionBtn}</a>
+                                </div>`
+                    }
+                `,
+            });
+        }
+
+        function renderAddAddressStep() {
+            Drawer.open({
+                header: translations.shipping.add.addressHeader,
+                content: `
+                    <form id="RechargeAddressForm">
+                        {% set addressType = 'shipping' %}
+                        {% include '_address_fields.html' %}
+                        <button data-save-address type="submit" class="save-address mb-0 rc-btn rc-btn--primary" name="saveBtn">
+                            ${translations.shipping.saveBtn}
+                        </button>
+                    </form>
+                `,
+            });
+            Drawer.toggleBackBtn(true, () => renderFirstStep());
+
+            ReCharge.formUtils.setupCountryProvinceSelectors('shipping');
+
+            // append the payment methods dropdown. Show a spinner while we are fetching
+            const loader = createSpinner();
+            loader.style.position = "absolute";
+            loader.style.bottom = "14px";
+            loader.style.left = "50%";
+            const paymentMethodContainer = document.createElement("div");
+            paymentMethodContainer.style.position = "relative";
+            paymentMethodContainer.innerHTML = `
+                    <div role="group" class="rc-form-control">
+                        <label id="paymentMethod-label" for="paymentMethod" class="rc-form__label">${translations.paymentMethod.header}</label>
+                        <select type="text" id="paymentMethod" class="rc-select" type="text" name="paymentMethod" value="" required disabled><select>
+                        <div class="rc-select-caret"></div>
+                    </div>
+                `;
+            {% if not useMultiplePaymentMethods %}
+                paymentMethodContainer.style.display = 'none';
+            {% endif %}
+            paymentMethodContainer.append(loader);
+
+            RechargeAddressForm.querySelector(".address-fields").append(
+                paymentMethodContainer
+            );
+
+            RechargeAddressForm.addEventListener("submit", async (evt) => {
+                evt.preventDefault();
+                try {
+                    window.locked = true;
+                    const savedAddress = await Api.submitRequest(
+                        () =>
+                            saveAddress(
+                                getAddressFormValues(RechargeAddressForm)
+                            ),
+                        {
+                            key: "updateShippingAddress",
+                            submitButton: RechargeAddressForm.elements.saveBtn,
+                            hideErrorToast: true,
+                            stayDisabled: true,
+                        }
+                    );
+
+                    // Refetch address to get all the data since response doesn't give it all
+                    const updatedAddress = await Api.getShippingAddress(
+                        savedAddress.id,
+                        { includeSubscriptions: true }
+                    );
+
+                    state.addresses.push(updatedAddress);
+                    // Go to the move step
+                    renderMoveSubscriptions(updatedAddress);
+                } catch (e) {
+                    console.error(e);
+                    handleError(e);
+                } finally {
+                    delete window.locked;
+                }
+
+                return false;
+            });
+
+            // Fetch the payment methods and append them to the select.
+            const select = paymentMethodContainer.querySelector(
+                '[name="paymentMethod"]'
+            );
+            select.innerHTML = `
+                ${
+                    state.paymentMethods.length
+                        ? state.paymentMethods.map((pm) => {
+                              const { title } = translatePaymentMethod(pm);
+                              return `<option value="${pm.id}">${title}</option>`;
+                          })
+                        : `<option value="">${translations.subscription.noPaymentMethod}</option>`
+                }
+            `;
+
+            const selectedPaymentMethod =
+                ReCharge.Novum.subscription.address.include?.payment_methods[0];
+            if (selectedPaymentMethod) {
+                select.value = selectedPaymentMethod.id; // set the default value
+            }
+            loader.remove();
+            select.toggleAttribute("disabled");
+        }
+
+        // Renders the editing of passed in address
+        function renderEditAddress(address) {
+            const numOfSubs = address.subscriptions.length;
+            Drawer.open({
+                header: translations.subscription.address.header,
+                content: `
+                      <form id="RechargeAddressForm">
+                        <input type="hidden" name="id" value="${address.id}" />
+                        ${AssociatedSubscriptionsAlert(numOfSubs)}
+                        {% set addressType = 'shipping' %}
+                        {% include '_address_fields.html' %}
+                        <button data-save-address type="submit" class="save-address mb-0 rc-btn rc-btn--primary" name="saveBtn">
+                        ${translations.shipping.saveBtn}
+                        </button>
+                        <button data-add-address type="button" class="rc-btn rc-btn--primary-text">
+                        + ${translations.shipping.add.saveBtn}
+                        </button>
+                        <div data-step-2 class="move-subscriptions d-none text-body-2"></div>
+                      </form>
+                    `,
+            });
+            if (state.addresses.length > 1) {
+                Drawer.toggleBackBtn(true, () => renderFirstStep());
+            }
+
+            ReCharge.formUtils.setupCountryProvinceSelectors('shipping');
+            // Update all the values to be what is current used
+            ReCharge.formUtils.populateAddressData(address);
+
+            const { RechargeAddressForm } = document.forms;
+
+            RechargeAddressForm.querySelector(
+                "[data-add-address]"
+            ).addEventListener("click", renderAddAddressStep);
+
+            // Add submit handler
+            RechargeAddressForm.addEventListener("submit", async (evt) => {
+                evt.preventDefault();
+                try {
+                    window.locked = true;
+                    const savedAddress = await Api.submitRequest(
+                        () =>
+                            saveAddress(
+                                getAddressFormValues(RechargeAddressForm)
+                            ),
+                        {
+                            key: "updateShippingAddress",
+                            submitButton: RechargeAddressForm.elements.saveBtn,
+                            successMessage:
+                                translations.subscription.address.success,
+                            hideErrorToast: true,
+                            stayDisabled: true,
+                        }
+                    );
+
+                    // Refetch address to get all the data since response doesn't give it all
+                    const updatedAddress = await Api.getShippingAddress(
+                        savedAddress.id,
+                        { includeSubscriptions: true }
+                    );
+
+                    // Set the global address to the new one. Merged since the new address doesn't include everything
+                    ReCharge.Novum.subscription.address = updatedAddress;
+                    // Render the new address
+                    renderShippingAddress(updatedAddress);
+                    Drawer.close({unlockWindow: true});
+                } catch (e) {
+                    console.error(e);
+                    handleError(e);
+                } finally {
+                    delete window.locked;
+                }
+
+                return false;
+            });
+        }
+
+        // Renders the move subscriptions step
+        function renderMoveSubscriptions(selectedAddress) {
+            const { subscription } = ReCharge.Novum;
+            let allowMoveSingle = true;
+            // get the current address
+            let currentAddress = subscription.address;
+            // get current order date to use for OTP count
+            const orderDate = subscription.next_charge_scheduled_at;
+
+            // Don't show the current subscription in the list
+            const filteredSubscriptions = currentAddress.subscriptions.filter(
+                (sub) => sub.id !== subscription.id
+            );
+          
+             // Pull out any cancelled subscritions from the list
+            const activeFilteredSubscriptions = filteredSubscriptions.filter((sub) => sub.status !== "CANCELLED");
+            const isSingleSub = activeFilteredSubscriptions.length === 0;
+
+            // if the selected item is an active subscription, we need to add 1 to the count as it will have been filtered
+            const numOfSubs = subscription.status === "ACTIVE" ? activeFilteredSubscriptions.length + 1 : activeFilteredSubscriptions.length;
+
+            // get only the OTPs for this address that are associated with the current order
+            const orderOTPs = currentAddress.onetimes.filter(
+                (otp) => (otp.next_charge_scheduled_at === orderDate)
+            );
+            const filteredOTPs = orderOTPs.filter((otp) => otp.id !== subscription.id);
+            const numOfOTPS = orderOTPs.length;
+            const orderItemTotal = numOfSubs + numOfOTPS;
+            // Find active subscriptions at the selected address
+            const selectedAddressActiveSubs = selectedAddress.subscriptions.filter((sub) => sub.status !== "CANCELLED");
+            const selectedAddressNumOfSubs = selectedAddressActiveSubs.length;
+
+            if ((selectedAddressNumOfSubs === 0 && subscription.status === "ONETIME") || (numOfSubs <= 1 && numOfOTPS > 0 && subscription.status === "ACTIVE")) {
+                allowMoveSingle = false;
+            }
+
+
+
+            Drawer.toggleBackBtn(true, () => renderFirstStep());
+            Drawer.setContent(`
+                <form id="RechargeMoveSubsForm" class="text-body-2">
+                    ${AssociatedSubscriptionsAlert(numOfSubs)}
+                    <h4 class="rc-subheading mt-7 mb-2">Selected subscription</h4>
+                    <span>${subscription.product_title}</span>
+                    ${AssociatedSubscriptionsList(activeFilteredSubscriptions)}
+                    ${AssociatedOTPsList(filteredOTPs)}
+                    <h4 class="rc-subheading mt-7 mb-2">Update to:</h4>
+                    ${createAddress(selectedAddress)}
+                    {% if useMultiplePaymentMethods %}
+                    <div class="mt-2">
+                        ${createPaymentMethodDetails(
+                            selectedAddress.include.payment_methods[0] ||
+                                subscription.address.include
+                                    .payment_methods[0]
+                        )}
+                    </div>
+                    {% endif %}
+                    <button type="button" class="update-all-btn rc-btn rc-btn--primary mt-5">
+                        ${
+                            (numOfSubs === 1 || numOfSubs === 0) && numOfOTPS === 0
+                                ? translations.subscription.address
+                                      .updateSingleBtn
+                                : translations.subscription.address.updateAllBtn.replace(
+                                      "{numOfSubs}",
+                                      orderItemTotal
+                                  )
+                        }
+                    </button>
+                    ${render(
+                        (!isSingleSub && allowMoveSingle) &&
+                            `<button type="button" class="update-single-btn rc-btn rc-btn--primary-border">
+                                ${translations.subscription.address.updateSelectedBtn}
+                            </button>`
+                    )}
+                    ${render(
+                        (!isSingleSub && allowMoveSingle) && `
+                        <p class="mt-0" style="
+                            font-style: italic;
+                            font-weight: 300;
+                            font-size: 11px;
+                            line-height: 14px;
+                            text-align: center;
+                        ">
+                            *Updating for this subscription only could result in additional shipping charges.
+                        </p>
+                    `)}
+                </form>
+            `);
+            const { RechargeMoveSubsForm } = document.forms;
+            RechargeMoveSubsForm.querySelector(
+                ".update-all-btn"
+            )?.addEventListener("click", () => {
+                updateSubscriptionAddress(selectedAddress, numOfSubs !== 0);
+            });
+
+            RechargeMoveSubsForm.querySelector(
+                ".update-single-btn"
+            )?.addEventListener("click", () => {
+                renderConfirmation(selectedAddress);
+            });
+        }
+
+        // Renders the confirmation step for single update
+        function renderConfirmation(selectedAddress) {
+            const { subscription } = ReCharge.Novum;
+
+            Drawer.toggleBackBtn(true, () =>
+                renderMoveSubscriptions(selectedAddress)
+            );
+            Drawer.setContent(`
+                <form id="RechargeMoveSubsForm" class="text-body-2">
+                    <div>${translations.subscription.willUse.replace(
+                        "{productTitle}",
+                        subscription.product_title
+                    )}</div>
+                    <div class="my-3 font-bold">
+                        ${createAddress(selectedAddress)}
+                        {% if useMultiplePaymentMethods %}
+                        <div class="mt-2">
+                            ${createPaymentMethodDetails(
+                                selectedAddress.include?.payment_methods[0] ||
+                                    subscription.address.include?.payment_methods[0] ||
+                                    state.paymentMethods[0]
+                            )}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        ${translations.subscription.address.confirmation.replace(
+                            "{productTitle}",
+                            subscription.product_title
+                        )}
+                    </div>
+                    <button type="button" class="confirm-btn rc-btn rc-btn--primary mt-5 mb-0">
+                        ${translations.subscription.confirmBtn}
+                    </button>
+                    <button type="button" class="back-btn rc-btn rc-btn--primary-text">
+                        ${translations.subscription.backBtn}
+                    </button>
+                </form>
+            `);
+            const { RechargeMoveSubsForm } = document.forms;
+            RechargeMoveSubsForm.querySelector(
+                ".confirm-btn"
+            )?.addEventListener("click", () => {
+                updateSubscriptionAddress(selectedAddress);
+            });
+
+            RechargeMoveSubsForm.querySelector(".back-btn")?.addEventListener(
+                "click",
+                () => {
+                    renderMoveSubscriptions(selectedAddress);
+                }
+            );
+        }
+
+        // Render the address selection flow
+        function renderAddressSelection() {
+            const currentAddressId = ReCharge.Novum.subscription.address.id;
+
+            Drawer.open({
+                header: translations.subscription.address.header,
+                content: `
+                    <form id="RechargeShippingForm">
+                        <div class="select-shipping-combo">
+                            <div data-shipping-address-combo-container class="shipping-radios"></div>
+                            <button type="button" class="next-btn rc_btn bbrc-btn" disabled>
+                                ${translations.subscription.goToConfirmation}
+                            </button>
+                            <button data-add-address type="button" class="rc-btn rc-btn--primary-text">
+                                + ${translations.shipping.add.saveBtn}
+                            </button>
+                        </div>
+                    </form>
+                `,
+            });
+
+            const { RechargeShippingForm } = document.forms;
+
+            // bring current address to top
+            const addresses = state.addresses
+                .sort((a) => (a.id === currentAddressId ? -1 : 0));
+
+            const container = document.querySelector(
+                "[data-shipping-address-combo-container]"
+            );
+
+            // Render the radio's
+            addresses.forEach((address) => {
+                const paymentMethod = address.include.payment_methods[0];
+                const radio = createRadio({
+                    id: `Address${address.id}`,
+                    name: "address",
+                    label: `
+                        <div class="w-100">
+                            <div class="d-flex justify-space-between align-items-start">
+                                ${createAddress(address)}
+                                ${render(
+                                    address.id === currentAddressId &&
+                                        `
+                                        <button type="button" class="edit-btn rc_btn rc_btn--secondary">
+                                            <span class="rc-btn--icon">{% include '_edit-icon.svg' %}</span>
+                                            ${translations.subscription.address.editBtn}
+                                        </button>
+                                        `
+                                )}
+                            </div>
+                            {% if useMultiplePaymentMethods %}
+                            <div class="mt-2">
+                                ${
+                                    paymentMethod
+                                        ? createPaymentMethodDetails(
+                                              paymentMethod
+                                          )
+                                        : translations.shipping.noPaymentMethod
+                                }
+                            </div>
+                            {% endif %}
+                        </div>`,
+                    value: address.id,
+                    isChecked: address.id === currentAddressId,
+                });
+                container.append(radio);
+            });
+
+            // On change, check to see if the payment method has changed and disable the next button.
+            RechargeShippingForm.addEventListener("change", (form) => {
+                const selectedId = Number(
+                    document.querySelector('[name="address"]:checked').value
+                );
+                const currentId = ReCharge.Novum.subscription.address.id;
+                RechargeShippingForm.querySelector(".next-btn").toggleAttribute(
+                    "disabled",
+                    currentId === selectedId
+                );
+            });
+
+            RechargeShippingForm.querySelector(".next-btn").addEventListener(
+                "click",
+                () => {
+                    renderMoveSubscriptions(
+                        state.addresses.find(
+                            (addr) =>
+                                addr.id ===
+                                Number(
+                                    RechargeShippingForm.querySelector(
+                                        '[name="address"]:checked'
+                                    ).value
+                                )
+                        )
+                    );
+                }
+            );
+
+            document
+                .querySelector(".edit-btn")
+                ?.addEventListener("click", () => {
+                    renderEditAddress(ReCharge.Novum.subscription.address);
+                    // Remove the add address button
+                    document.forms.RechargeAddressForm.querySelector(
+                        "[data-add-address]"
+                    )?.remove();
+                });
+
+            document
+                .querySelector("[data-add-address]")
+                .addEventListener("click", renderAddAddressStep);
+        }
+
+        // Event handler when the shipping address card is clicked
+        async function onShippingAddressClick() {
+            Drawer.open({
+                header: translations.subscription.address.header,
+                content: `
+                    <form id="RechargeShippingForm">
+                        <div class="loader mb-4 d-flex justify-center"></div>
+                    </form>
+                `,
+            });
+            const loader = document.querySelector(".loader");
+            const spinner = createSpinner({ size: 36 });
+            loader.append(spinner);
+            const [paymentMethods] = await Promise.all([
+                fetchPaymentMethods(),
+                fetchAddresses(),
+            ]); // always resolves
+            loader.remove();
+
+            // If they closed drawer, don't continue
+            if (!document.forms.RechargeShippingForm) return;
+
+            // If there are no payment methods, render the no payment methods step
+            if (!paymentMethods.length) {
+                renderNoPaymentMethods();
+            } else {
+                renderFirstStep();
+            }
+        }
+
+        // Initial setup on the page
+        function init() {
+            const { subscription } = ReCharge.Novum;
+            renderShippingAddress(subscription.address);
+
+            const isExpired = subscription.status.toLowerCase() === "expired";
+            const isEditAllowed =
+                settings.customer_portal.edit_shipping_address;
+            // Don't allow user to edit the address if it's expired or not allowed
+            if (!isExpired && isEditAllowed) {
+                const cardEl = document.querySelector(
+                    ".subscription-shipping-address"
+                );
+                addAccessibleClickListener(cardEl, onShippingAddressClick);
+                cardEl.querySelector("i").classList.remove("d-none");
+            }
+        }
+
+        init();
+    })();
+</script>

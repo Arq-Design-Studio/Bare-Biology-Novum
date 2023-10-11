@@ -1,0 +1,16 @@
+<nav class="account-nav" aria-label="Account menu">
+  <ul class="account-nav__list">
+    <li class="account-nav__item">
+      <a href="{{ order_list_url }}" class="account-nav__link">Orders</a>
+    </li>
+    <li class="account-nav__item">
+      <a href="{{ subscription_list_url }}" class="account-nav__link" aria-current="page">Subscriptions</a>
+    </li>
+    <li class="account-nav__item">
+      <a href="/pages/rewards" class="account-nav__link">Loyalty</a>
+    </li>
+    <li class="account-nav__item">
+      <a href="{{ shipping_list_url }}" class="account-nav__link">{{ 'cp_nav_shipping' | t }}</a>
+    </li>  
+  </ul>
+</nav>

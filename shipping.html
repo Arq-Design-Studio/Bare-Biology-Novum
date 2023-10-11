@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="ShippingPage" class="shipping-page">
+  <h3 class="rc-heading d-flex justify-space-between align-items-center flex-wrap">
+    {{ 'cp_nav_shipping' | t }}
+    <button class="rc_btn text-uppercase title-bold bbrc-btn add-shipping-info d-none">{{ 'cp_add_shipping_address_button' | t }}</button>
+  </h3>
+</div>
+
+<script>
+  {% include '_shipping.js' %}
+</script>
+{% endblock %}

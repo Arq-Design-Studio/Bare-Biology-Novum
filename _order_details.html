@@ -1,0 +1,45 @@
+<div class="order-number-date--wrapper">
+  <div class="order-number order-details">{{ 'Order' | t }} #12345 </div>
+  <span class="order-date"> April 10, 2020 </span>
+</div>
+
+<p class="order-line-items text-font-14">
+</p>
+
+<div class="order-cost-lines--wrapper mt-5">
+  <div class="order-cost-lines--subtotal">
+    <p class="rc_card_container text-font-14 text-uppercase d-flex justify-space-between">
+      <span> {{ 'Shipping' | t }} </span>
+      <span class="order-shipping">$0.00 </span>
+    </p>
+
+    <p class="rc_card_container text-font-14 text-uppercase d-flex justify-space-between">
+      <span> {{ 'Discounts' | t }} </span>
+      <span class="order-discounts">-$0.00 </span>
+    </p>
+
+    <p class="rc_card_container text-font-14 text-uppercase d-flex justify-space-between">
+      <span> {{ 'Taxes' | t }} </span>
+      <span class="order-taxes">$0.00 </span>
+    </p>
+  </div>
+  <div class="order-cost-lines--total mt-5">
+    <p class="rc_card_container text-font-16 font-bold text-uppercase d-flex justify-space-between">
+      <span> {{ 'Total' | t }} </span>
+      <span class="order-total order-details line-height-12">$80.00 </span>
+    </p>
+    <!-- Write your comments here 
+    <div class="order-modification-info">
+  <div class="order-details order-modification-details line-height-14">${ ReCharge.translations.purchaseHistory.itemsNotDeliveredHeader }</div>
+  <div class="rc-alert">
+    <i class="rc-alert__icon fa fa-info-circle"></i>
+    <span class="rc-alert__text">${ ReCharge.translations.purchaseHistory.itemsNotDeliveredInfo }</span>
+  </div>
+-->
+  <p class="order-line-item-modifications text-font-14">
+  </p>
+
+</div>
+    
+  </div>
+</div>

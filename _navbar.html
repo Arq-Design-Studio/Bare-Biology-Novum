@@ -1,0 +1,54 @@
+<div class="nav--wrapper">
+    <div class="list__item list_item_chosen text-center" data-arrow="down">
+        <span class="chosen-title">
+            {{ 'Purchase_History_Tab' | t }}
+        </span>
+      	<div class="list_item_chosen--arrow">
+          <i class="fas fa-chevron-down arrow-down"></i>
+          <i class="fas fa-chevron-up arrow-up" style="display: none"></i>
+      	</div>
+    </div>
+    <ul class="nav__list--desktop rc_card_container">
+        <li class="js-subscriptions-page">
+            <a href="{{ subscription_list_url }}" id="subscriptions-page" class="">
+                {{ 'Subscriptions_Tab' | t }}
+            </a>
+        </li>
+        {% if settings.customer_portal.view_order_schedule %}
+        <li class="js-schedule-page">
+            <a href="{{ schedule_url }}" id="schedule-page" class="">{{ 'Delivery_Schedule_Tab' | t }}</a>
+        </li>
+        {% endif %}
+        <li class="js-orders-page">
+            <a href="{{ order_list_url }}" id="orders-page" class="">{{ 'Purchase_History_Tab' | t }}</a>
+        </li>
+        <li class="js-addresses-page">
+            <a href="{{ shipping_list_url }}" id="shipping-page" class="">{{ 'cp_nav_shipping' | t }}</a>
+        </li>
+        <li class="js-payment_methods-page">
+            <a href="{{ payment_methods_url }}" id="payment_methods-page" class="">{{ 'cp_nav_payment_methods' | t }}</a>
+        </li>
+    </ul>
+</div>
+
+<ul class="nav__list--mobile text-center">
+    <li class="js-subscriptions-page">
+        <a href="{{ subscription_list_url }}" id="subscriptions-page">
+            {{ 'Subscriptions_Tab' | t }}
+        </a>
+    </li>
+    {% if settings.customer_portal.view_order_schedule %}
+    <li class="js-schedule-page">
+        <a href="{{ schedule_url }}" id="schedule-page">{{ 'Delivery_Schedule_Tab' | t }}</a>
+    </li>
+    {% endif %}
+    <li class="js-orders-page">
+        <a href="{{ order_list_url }}" id="orders-page">{{ 'Purchase_History_Tab' | t }}</a>
+    </li>
+    <li class="js-addresses-page">
+        <a href="{{ shipping_list_url }}" id="shipping-page">{{ 'cp_nav_shipping' | t }}</a>
+    </li>
+    <li class="js-payment_methods-page">
+        <a href="{{ payment_methods_url }}" id="payment_methods-page">{{ 'cp_nav_payment_methods' | t }}</a>
+    </li>
+</ul>

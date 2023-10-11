@@ -1,0 +1,10 @@
+{% if settings.customer_portal.force_customer_portal_accounts and not is_theme_preview %}
+    <div id="recharge_verification_prefix_wrap" style="display: none;">
+        {% raw %}{% capture customer_id %}{{ customer.id }}{% endcapture %}{% endraw %}
+        {% raw %}{% capture shopify_customer_id %}{% endraw %}{{ customer.shopify_customer_id }}{% raw %}{% endcapture %}{% endraw %}
+        {% raw %}
+            {% if customer and customer_id == shopify_customer_id %}
+                {% comment %}Customer match found{% endcomment %}
+        {% endraw %}
+    </div>
+{% endif %}

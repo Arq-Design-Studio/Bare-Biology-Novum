@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    {% include '_store_credits.css' %}
+</style>
+
+<script>
+    {% include '_subscriptions.js' %}
+</script>
+
+{% set active_subscriptions = subscriptions | selectattr('status', 'equalto', 'ACTIVE') | list %}
+{% set cancelled_expired_subscriptions = [] %}
+
+{% for subscription in subscriptions | selectattr('status', 'equalto', 'CANCELLED') %}
+    {% if cancelled_expired_subscriptions.append(subscription) %}{% endif %}
+{% endfor %}
+{% for subscription in subscriptions | selectattr('status', 'equalto', 'EXPIRED') %}
+    {% if cancelled_expired_subscriptions.append(subscription) %}{% endif %}
+{% endfor %}
+
+<div class="rc_title">
+	<h3> {{'Subscriptions_Tab' | t }} </h3>
+    <div id="store-credits"></div>
+</div>
+
+<div class="rc_add_product">
+
+    {% if settings.customer_portal.subscription.add_product%}
+        <button
+            class="rc_btn rc_btn--primary bbrc-btn"
+            onclick="addProductHandler(event);"
+        >
+            {{ 'cp_add_product_label' | t }}
+        </button>
+    {% endif %}
+</div>
+<br>
+
+{% if active_subscriptions | length %}
+    <h2 class="page-title text-uppercase"> {{ 'cp_active_subscriptions' | t }} </h2>
+    {% for address_id, subscriptions in active_subscriptions | groupby('address_id') %}
+        <section data-address-id="{{address_id}}">
+            <h2 class="section-title rc-subheading text-uppercase hidden"></h2>
+            {% for subscription in subscriptions | sort(attribute='next_charge_scheduled_at') %}
+                <div class="rc_subscription_card_element_wrapper rc_subscription_container rc_active_subscriptions">
+                    <div class="rc_subscription_info_container">
+                      	<div class="rc_subscription_prod_info--wrapper">
+                            <div class="ajom-rc__product_image rc_photo_container">
+                              {% set image_size = '300x300' %}
+                              {% include '_product_image.html' %}
+                            </div>
+                            <div class="rc_schedule_wrapper">
+                              <div class="rc_order_title_container">
+                                  <span class="rc_order_title"> {{ subscription.product_title | replace('Auto renew', '') }} </span>
+                              </div>
+                              <p class="schedule_meta_info">
+                                  {% if subscription.status == 'ACTIVE' %}
+                                      {% include '_subscription-icon.svg' %}
+                                      {% if subscription.is_prepaid %}
+                                          {{ 'pre_paid' | t }}
+                                      {% endif %}
+                                      {{ 'cp_subscription' | t }}
+                                  {% endif %}
+                              </p>
+                              {% if subscription.variant_title %}
+                                  <p class="schedule_meta_info"> {{ subscription.variant_title }} </p>
+                              {% endif %}
+                              <p class="schedule_meta_info"> {{ 'Quantity' | t }}: {{ subscription.quantity }} </p>
+                              <p class="schedule_price_info">
+                                  {{ subscription.price | money_localized }}
+                              </p>
+                            </div>
+                            <div class="rc_subscription_next_charge_date">
+                              <div class="rc_subscription_next_charge_date--wrapper">
+                                  {% if subscription.charge_interval_frequency != subscription.order_interval_frequency %}
+                                      <span class="text-uppercase">{{ 'next_charge' | t }}:</span>
+                                  {% else %}
+                                {% if subscription.next_charge_scheduled_at %}
+                                      <span class="text-uppercase">{{ 'cp_next_shipment' | t }}:</span>
+                                {%else%}
+                                {%endif%}
+                                  {% endif %}
+
+                                  {% if subscription.next_charge_scheduled_at %}
+                                      <span class="text-uppercase">
+                                          {% set next_charge_date = subscription.next_charge_scheduled_at | date('%B %d') | downcase %}
+                                          {% include '_translated_month.html' %}
+                                      </span>
+                                  {% else %}
+                                <span class="text-uppercase">{{ 'cp_next_shipment_no_date' | t }}</span>
+                                  {% endif %}
+                              </div>
+                        	</div>
+                      	</div>
+                    </div>
+                  
+                    <div class="rc_button_wrapper">
+                      <a href="{{ subscription.id | subscription_url }}" class="rc_btn rc_btn--primary bbrc-btn" style="font-family: AdobeCaslonItalic;">
+                          {{ 'Edit' | t }}
+                      </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+    {% endfor %}
+{% elif not cancelled_expired_subscriptions | length %}
+    <h2> {{ 'No_Subscriptions_Message' | t }} </h2>
+{% endif %}
+
+
+{% if cancelled_expired_subscriptions | length %}
+    <h2 class="page-title text-uppercase"> {{ 'cp_inactive_subscriptions' | t }} </h2>
+    {% for address_id, subscriptions in cancelled_expired_subscriptions | groupby('address_id') %}
+        <section data-address-id="{{address_id}}">
+            <h2 class="section-title rc-subheading text-uppercase hidden"></h2>
+            {% for subscription in subscriptions %}
+                <div class="rc_subscription_card_element_wrapper rc_inactive_subscriptions">
+                    <div class="rc_subscription_info_container">
+                      <div class="rc_subscription_prod_info--wrapper">
+                        <div class="ajom-rc__product_image rc_photo_container">
+                            {% set image_size = '300x300' %}
+                            {% include '_product_image.html' %}
+                        </div>
+
+                        <div class="rc_schedule_wrapper">
+                            <div class="rc_order_title_container">
+                                <span class="rc_order_title"> {{ subscription.product_title | replace('Auto renew', '') }} </span>
+                                {% if subscription.status == 'EXPIRED' %}
+                                    <p class="expired-icon"> {{'Expired' | t }} </p>
+                                {% endif %}
+                            </div>
+
+                            <p class="schedule_meta_info">
+                                {% include '_subscription-icon.svg' %}
+                                {% if subscription.is_prepaid %}
+                                    {{ 'pre_paid' | t }}
+                                {% endif %}
+                                {{ 'cp_subscription' | t }}
+                            </p>
+
+                            <p class="schedule_meta_info"> {{ 'Quantity' | t }}: {{ subscription.quantity }} </p>
+
+                            <p class="schedule_price_info"> {{ subscription.price | money_localized }} </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {% if settings.customer_portal.subscription.reactivate_subscription%}
+                        <div class="rc_button_wrapper">
+                            <button
+                                class="rc_btn width-100 {{ 'expired' if subscription.status == 'EXPIRED' else 'rc_btn--primary bbrc-btn' }}"
+                                {{ 'disabled' if subscription.status == 'EXPIRED' else '' }}
+                                onclick="reactivateSubscriptionHandler(event);"
+                                data-id="{{ subscription.id }}"
+                            >
+                                {{'Re-activate' | t }}
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </section>
+    {% endfor %}
+{% endif %}
+
+<script>
+    (function() {
+        ReCharge.Novum.addresses = {{ addresses | sort(attribute='id') | json }};
+        ReCharge.Novum.store = {{ store | json }};
+        ReCharge.Novum.settings = {{ settings | json }};
+        ReCharge.Novum.subscriptions = {{ subscriptions | json }};
+        ReCharge.Novum.onetimes = {{ onetimes | json }};
+        const discounts = [];
+
+        ReCharge.Novum.addresses.forEach(address => {
+            if (address.discount_id != null) {
+                discounts.push(address.discount);
+            }
+        });
+
+        sessionStorage.setItem('rc_discounts', JSON.stringify(discounts));
+
+        document.querySelectorAll('[data-address-id]').forEach((section) => {
+            const addressId = Number(section.getAttribute('data-address-id'));
+            const address = ReCharge.Novum.addresses.find(a => a.id === addressId);
+            const sectionTitle = section.querySelector('.section-title');
+            if (address && sectionTitle) {
+                const paymentMethod = address.include.payment_methods[0];
+                const paymentMethodText = paymentMethod ? ReCharge.Components.translatePaymentMethod(paymentMethod).title : '';
+                const titleContent = [address.address1, address.address2, `${address.city},`, address.province, address.zip, paymentMethodText && `| ${paymentMethodText}`].filter(Boolean).join(' ');
+                sectionTitle.textContent = titleContent;
+            }
+        });
+    })();
+  
+  
+    const settings = {{ settings | json }}
+    if (settings?.customer_portal?.show_credits) {
+        const currency = {{ store.currency | json }};
+        window.ReCharge.Components.renderStoreCredits(currency);
+    }
+</script>
+
+{% endblock %}

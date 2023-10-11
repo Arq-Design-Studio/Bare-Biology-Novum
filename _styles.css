@@ -1,0 +1,2035 @@
+@import 'https://use.typekit.net/ldg0oez.css';
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* Colors */
+body#recharge-novum {
+  --preview-primary: #ffffff;
+  --primary-background: #f8f8f8;
+  --secondary-background: #F8F7F2;
+  --tertiary-background: #FCFBFA;
+  --button-primary: #252525;
+  --button-secondary: #252525;
+  --input-color: #252525;
+}
+
+/* Spacing */
+:root {
+  --rc-spacing-1: 4px;
+  --rc-spacing-2: 8px;
+  --rc-spacing-3: 12px;
+  --rc-spacing-4: 16px;
+  --rc-spacing-5: 20px;
+  --rc-spacing-6: 24px;
+  --rc-spacing-7: 28px;
+}
+
+body#recharge-novum {
+  --primary-color: #4C4646;
+  --color-white: var(--preview-primary);
+  --color-black: #000000;
+  --color-green: #537F6E;
+  --color-red: #e63235;
+  --color-dark-red: #e63235;
+  --color-transparent: #00000000;
+  --color-light-green: var(--button-primary);
+  --color-dark-green: var(--button-secondary);
+  --color-light-blue: var(--secondary-background);
+  --color-thin-blue: var(--secondary-background);
+  --color-turquoise-blue: transparent;
+  --color-gray: #67727A;
+  --color-light-gray: #E4E2E2;
+  --color-charcoal: #4C4646;
+  --color-success-toast: var(--input-color);
+  --background-color: var(--primary-background);
+  --background-green: var(--button-primary);
+  --color-subscription-expired: #c0c0c0;
+  --border-color: var(--secondary-background);
+  --info-modal-color-dark: #424242;
+  --info-modal-color-light-gray: #B6B6BD;
+  --color-orange: #f1833b;
+  --info-modal-color-blue: #317d94;
+
+  --rc-checkbox-check-color: var(--color-white);
+  --rc-checkbox-background: var(--color-white);
+  --rc-checkbox-active-background: var(--primary-color);
+  --rc-checkbox-border: var(--rc-primary-color);
+
+  --rc-btn-disabled-background: #b6b6bd;
+}
+
+/* Fonts */
+body#recharge-novum {
+  --recharge-te-primary-font: Futura, sans-serif; 
+  --recharge-te-secondary-font: "adobe-caslon-pro", sans-serif; 
+}
+
+body#recharge-novum #recharge-te * {
+  list-style-type: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body#recharge-novum #recharge-te {
+  position: relative;
+  z-index: 100000;
+}
+
+body#recharge-novum {
+  color: var(--primary-color);
+  z-index: 2;
+}
+
+body#recharge-novum header, body body#recharge-novum .site-header {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+body#recharge-novum footer, body#recharge-novum .site-footer {
+  margin-top: 0px !important;
+}
+
+body#recharge-novum #recharge-te {
+  font-family: var(--recharge-te-primary-font);
+  background: var(--background-color);
+  color: var(#537F6E);
+  padding-bottom: 55px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper p,
+body#recharge-novum #recharge-te p {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 0.47px;
+  color: var(--input-color);
+  margin: 8px 0px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper h6,
+body#recharge-novum #recharge-te h6 {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: 1.47px;
+  color: var(--color-turquoise-blue);
+  margin-bottom: 17px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper h5,
+body#recharge-novum #recharge-te h5 {
+  font-family: var(--recharge-te-secondary-font);
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px !important;
+  line-height: 14px;
+  color: var(--input-color);
+  margin: 8px 0px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper h4,
+body#recharge-novum #recharge-te h4 {
+  font-family: var(--recharge-te-secondary-font);
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--input-color);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper h3,
+body#recharge-novum #recharge-te h3 {
+  font-family: var(--recharge-te-secondary-font);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 48px;
+  color: var(--primary-color);
+  margin-bottom: 17px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper h2,
+body#recharge-novum #recharge-te h2 {
+  text-transform: none;
+  font-family: var(--recharge-te-secondary-font);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 34px;
+  color: var(--primary-color);
+  margin-bottom: 17px;
+}
+
+body#recharge-novum #recharge-te i {
+  color: #0d2d32;
+}
+
+body#recharge-novum #recharge-te ul li a, body#recharge-novum #recharge-te a:not(.rc-btn) {
+  text-decoration: none !important;
+  color: var(--primary-color);
+}
+
+body#recharge-novum #recharge-te input,
+body#recharge-novum #recharge-te #rc_te-template-wrapper input,
+body#recharge-novum #recharge-te select,
+body#recharge-novum #recharge-te #rc_te-template-wrapper select {
+  padding: 10px;
+  background-color: transparent;
+  font-size: 12px;
+}
+
+body#recharge-novum #recharge-te select,
+body#recharge-novum #recharge-te #rc_te-template-wrapper select {
+  width: 100%;
+  border: 1px solid var(--color-light-gray);
+  margin-bottom: 15px;
+  background-image: unset;
+  -webkit-appearance: menulist;
+  appearance: menulist;
+}
+
+body#recharge-novum #recharge-te .rc_purchase_type {
+  padding: 0px;
+  background-color: var(--color-white);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+body#recharge-novum #recharge-te .rc_purchase_type label,
+body#recharge-novum #recharge-te .rc_delivery_options label {
+  padding: 14px 10px 14px 0px;
+  flex-basis: 90%;
+}
+
+body#recharge-novum #recharge-te .rc_purchase_type input,
+body#recharge-novum #recharge-te .rc_delivery_options input {
+  flex-basis: 10%;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper select,
+body#recharge-novum #recharge-te select {
+  height: 42px;
+  margin-bottom: 15px;
+}
+
+button,
+input[type="submit"],
+label[for] {
+  cursor: pointer;
+}
+
+input:focus {
+  outline: none;
+  border: none;
+}
+
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+a,
+button,
+[role="button"],
+input,
+label,
+select,
+textarea {
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+   color: var(--primary-color);
+}
+
+body#recharge-novum #recharge-te div.page-layout {
+  padding: 2.5rem 1.5rem !important;
+}
+@media screen and (min-width: 650px) {
+  body#recharge-novum #recharge-te div.page-layout {
+    padding: 5.5rem 1.5rem !important;
+  }
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper ul,
+body#recharge-novum #recharge-te ul {
+  list-style-type: none !important;
+  margin-left: 0px;
+}
+
+body#recharge-novum .rc_form {
+  width: 100%;
+}
+
+body#recharge-novum label {
+  margin-bottom: 5px;
+}
+
+body#recharge-novum input:checked+label {
+  border: none;
+}
+
+body#recharge-novum ul.rc_toaster {
+  position: fixed;
+  max-width: 85%;
+  color: var(--color-white);
+  bottom: 27px;
+  margin: 0;
+  padding: 0;
+  right: 27px;
+  z-index: 100000000000000 !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: height 1s;
+  transition: height 1s;
+}
+
+body#recharge-novum li.rc_toast {
+  width: 100%;
+  padding: 12px 15px;
+  background: #AAA;
+  color: var(--color-white);
+  margin: 10px 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-animation: popup 0.6s cubic-bezier(0.1, 1.06, 0.6, 1.34), hide 0.4s 3s;
+  animation: popup 0.6s cubic-bezier(0.1, 1.06, 0.6, 1.34), hide 0.4s 3s;
+}
+
+body#recharge-novum li.rc_toast p,
+body#recharge-novum li.rc_toast p:before,
+body#recharge-novum li.rc_toast span:before {
+  display: inline-block;
+}
+
+body#recharge-novum li.rc_toast p:before {
+  content: "\2014";
+  margin: 0 6px;
+}
+
+body#recharge-novum li.rc_toast p {
+  color: var(--color-white);
+  margin: 0;
+  padding: 0;
+}
+
+body#recharge-novum span.rc_toast__type:before,
+body#recharge-novum span.rc_toast__button:before {
+  font-family: fontawesome;
+  margin-right: 6px;
+}
+
+body#recharge-novum span.rc_toast__button:before {
+  content: "\f00d";
+  margin: 0 0 0 30px;
+}
+
+body#recharge-novum li.rc_toast.rc_toast--error {
+  background-color: var(--color-dark-red);
+}
+
+body#recharge-novum #recharge-te .error-message,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .error-message {
+  color: var(--color-dark-red);
+  font-size: 11px;
+  margin-top: 0;
+}
+
+body#recharge-novum li.rc_toast.rc_toast--error span.rc_toast__type:before {
+  content: "\f071";
+}
+
+body#recharge-novum li.rc_toast.rc_toast--success {
+  background-color: var(--color-success-toast);
+  bottom: 95px;
+}
+
+body#recharge-novum li.rc_toast.rc_toast--success span.rc_toast__type:before {
+  content: "\f00c";
+}
+
+body#recharge-novum li.rc_toast.rc_toast--warning {
+  background-color: #fb8309;
+}
+
+body#recharge-novum li.rc_toast.rc_toast--warning span.rc_toast__type:before {
+  content: "\f071";
+}
+
+@media screen and (min-width: 768px) {
+  .rc_toast {
+    white-space: nowrap;
+  }
+}
+
+@-webkit-keyframes popup {
+  from {
+    -webkit-transform: translateY(50%);
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes popup {
+  from {
+    -webkit-transform: translateY(50%);
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes hide {
+  from {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/*=============
+Custom styles
+=============*/
+
+/* general styles begin */
+@media (min-width: 750px){
+  .page-container {
+    transform: none;
+  }
+}
+
+body#recharge-novum #recharge-te .rc_page-width {
+  padding-left: 55px;
+  padding-right: 55px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body#recharge-novum #recharge-te .border-light,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .border-light {
+  border-radius: 5px;
+  border: 1px solid var(--color-light-gray);
+}
+
+body#recharge-novum #recharge-te .text-uppercase, 
+body#recharge-novum #recharge-te #rc_te-template-wrapper .text-uppercase {
+    text-transform: uppercase;
+}
+
+body#recharge-novum #recharge-te .title-bold,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .title-bold {
+  font-weight: 600 !important;
+}
+
+body#recharge-novum #recharge-te .font-normal,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .font-normal {
+  font-size: normal !important;
+}
+
+body#recharge-novum #recharge-te .primary-font-size,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .primary-font-size {
+  font-size: 12px !important;
+}
+
+body#recharge-novum #recharge-te .letter-spacing,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .letter-spacing {
+  letter-spacing: 1.47px;
+}
+
+body#recharge-novum #recharge-te .width-100,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .width-100 {
+  width: 100%;
+}
+
+body#recharge-novum #recharge-te .text-font-14,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .text-font-14 {
+  font-size: 14px !important;
+  line-height: 20px !important;
+}
+
+body#recharge-novum #recharge-te .text-font-16,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .text-font-16 {
+  font-size: 16px !important;
+  line-height: 22px !important;
+}
+
+body#recharge-novum #recharge-te .text-font-20,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .text-font-20 {
+  font-size: 20px !important;
+  line-height: 28px !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_card_container,
+body#recharge-novum #recharge-te .rc_card_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_discount_container .rc_card_title,
+body#recharge-novum #recharge-te .rc_discount_container .rc_card_title {
+  margin-bottom: 20px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_discount,
+body#recharge-novum #recharge-te .rc_discount {
+  display: flex;
+  justify-content: space-between;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .text-center,
+body#recharge-novum #recharge-te .text-center {
+  text-align: center;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .align-self-center,
+body#recharge-novum #recharge-te .align-self-center {
+  align-self: center;
+}
+
+body#recharge-novum #recharge-te .margin-top-8 {
+  margin-top: 8px;
+}
+
+body#recharge-novum #recharge-te .margin-top-10 {
+  margin-top: 10px;
+}
+
+body#recharge-novum #recharge-te .margin-left-10 {
+  margin-left: 10px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .padding-t-l-b {
+  padding-top: 10px;
+  padding-left: 18px;
+  padding-bottom: 10px;
+}
+
+body#recharge-novum #recharge-te .color-dark-green,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .color-dark-green {
+  color: var(--color-dark-green);
+}
+
+body#recharge-novum #recharge-te .color-light-green,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .color-light-green {
+  color: var(--color-light-green);
+}
+
+body#recharge-novum #recharge-te .color-dark-red,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .color-dark-red {
+  color: var(--color-dark-red);
+}
+
+body#recharge-novum #recharge-te .color-gray,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .color-gray {
+  color: var(--color-gray);
+}
+
+body#recharge-novum #recharge-te .color-turquoise-blue,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .color-turquoise-blue {
+  color: var(--color-turquoise-blue);
+}
+
+body#recharge-novum #recharge-te .color-orange,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .color-orange {
+  color: var(--color-orange);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_input_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_input_container div,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_input_container p,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_input_container select {
+   flex-basis: 48%;
+}
+
+body#recharge-novum #recharge-te #te-modal-content .textarea-size {
+  width: 100%;
+  min-height: 100px;
+}
+
+body#recharge-novum #recharge-te #te-modal-content input[type = text] {
+  height: 42px;
+}
+
+body#recharge-novum #recharge-te .rc_product_list_container .product-title {
+  height: 29px;
+  font-family: var(--recharge-te-secondary-font);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+body#recharge-novum #recharge-te .rc_product_list_container .vertical-divider {
+  margin: 0px 5px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #js-rc_schedule_container .scheduled-order {
+  margin-bottom: 20px;
+  background: var(--color-white);
+  border-radius: 5px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #js-rc_schedule_container .order-divider {
+  border: 1px solid var(--color-light-blue);
+  margin: 0px 20px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_container {
+  margin-bottom: 0px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_wrapper .expired-icon,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .expired-icon {
+  background: var(--color-light-blue);
+  color: var(--color-dark-green);
+  border-radius: 15px;
+  padding: 4px 12px;
+  text-transform: uppercase;
+  margin: 5px;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+}
+
+body#recharge-novum #recharge-te #te-modal-content .subscription-order-divider {
+  border: 1px solid var(--color-light-blue);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container .upsell-btn-mobile {
+  background: var(--color-white);
+  border: 1px solid var(--primary-color);
+}
+
+body#recharge-novum #recharge-te #te-modal-content .display-flex,
+body#recharge-novum #recharge-te #te-card-modal-content .display-flex {
+  display: flex;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc-card .font-spacing {
+  letter-spacing: 0.09em;
+}
+
+/* general styles end */
+
+/* Header styles for hosted portal begin */
+{% if settings.customer_portal.hosted_customer_portal %}
+    body#recharge-novum #recharge-te .rc_theme__header {
+        height: 72px;
+        background-color: var(--color-white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    body#recharge-novum #recharge-te .rc_theme__header #novum-logo {
+        margin-bottom: 0;
+        font-size: 33px;
+    }
+
+    #rc_account_link,
+    #rc_account_logout {
+        position: absolute;
+        font-size: 12px;
+        line-height: 12px;
+        cursor: pointer;
+    }
+
+    #rc_account_link {
+        left: 2em;
+    }
+
+    #rc_account_logout {
+        right: 2em;
+    }
+
+    body #recharge-te .rc_theme__header #rc-main-logo-link img {
+        max-height: 50px;
+        max-width: 300px;
+    }
+
+    @media screen and (max-width: 650px) {
+        body#recharge-novum #recharge-te .rc_theme__header {
+            height: 80px;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        #rc_account_link {
+            position: initial;
+        }
+
+        #rc-main-logo-link {
+            margin-bottom: 16px !important;
+        }
+    }
+{% endif %}
+/* Header styles end */
+
+
+
+/* Banner and Account Nav styles begin */
+body#recharge-novum #recharge-te div.account-banner h1.account-banner__title {
+  font-size: 50px;
+  font-style: italic;
+}
+body#recharge-novum #recharge-te nav.account-nav * {
+	font-family: var(--recharge-te-primary-font);
+}
+/* Banner and Account Nav styles end */
+
+
+
+/* Navbar styles begin */
+body#recharge-novum #recharge-te .nav--wrapper {
+  padding: 10px 0px;
+  margin-bottom: 36px;
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-white);
+}
+
+@media screen and (min-width: 650px) {
+  body#recharge-novum #recharge-te .nav--wrapper {
+  	padding-top: 3px;
+  }
+}
+
+@media screen and (max-width: 649px) {
+  body#recharge-novum #recharge-te .nav--wrapper div.list_item_chosen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  body#recharge-novum #recharge-te .nav--wrapper div.list_item_chosen--arrow {
+    position: absolute;
+    right: 12px;
+  }
+  body#recharge-novum #recharge-te .nav--wrapper div.list_item_chosen--arrow svg.svg-inline--fa {
+    width: 12px !important;
+  }
+}
+
+
+body#recharge-novum #recharge-te div.nav--wrapper div.list__item {
+  font-size: 19px;
+  line-height: 23px;
+  font-style: italic;
+  font-weight: 400;
+  border-color: var(--color-charcoal);
+}
+body#recharge-novum #recharge-te div.nav--wrapper div.list__item span {
+  font-style: italic;
+}
+
+.arrow--hide {
+  display: none;
+}
+
+body#recharge-novum #recharge-te .bg-light {
+  background: var(--color-light-blue);
+}
+
+body#recharge-novum #recharge-te .nav--wrapper--margin {
+  margin-bottom: 0px;
+}
+
+body#recharge-novum #recharge-te .nav__list--desktop {
+  max-width: 1200px;
+  width: 100%;
+  font-size: 12px;
+  line-height: 14px;
+  list-style-type: none !important;
+}
+
+body#recharge-novum #recharge-te .nav__list--desktop:last-child::after {
+  content: none;
+}
+
+body#recharge-novum #recharge-te .list_item_chosen {
+  display: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+body#recharge-novum #recharge-te .menu--active {
+  display: block !important;
+}
+
+body#recharge-novum #recharge-te .nav__list--mobile {
+  display: none;
+  margin-bottom: 30px;
+  list-style-type: none !important;
+  background-color: var(--color-white);
+}
+
+body#recharge-novum #recharge-te .nav__list--mobile li {
+  padding: 10px;
+  border-top: 1px solid var(--color-white);
+  background: var(--background-green);
+  cursor: pointer;
+  font-size: 19px !important;
+  line-height: 20px !important;
+  font-family: "adobe-caslon-pro", sans-serif;
+  font-style: italic;
+}
+
+body#recharge-novum #recharge-te .nav__list--mobile li a,
+body#recharge-novum #recharge-te .nav__list--mobile li a:hover {
+  color: var(--color-white) !important;
+}
+
+@media (max-width: 649px) {
+  body#recharge-novum #recharge-te .nav__list--desktop {
+    display: none;
+  }
+  body#recharge-novum #recharge-te .list_item_chosen {
+    display: block;
+  }
+}
+
+/* Navbar styles end */
+
+
+/* Heading style starts */
+body#recharge-novum #recharge-te div.rc_title {
+  border-bottom: 1px solid #E4E2E2;
+  margin-bottom: 24px;
+}
+body#recharge-novum #recharge-te div.rc_title h3 {
+  margin-bottom: 0px !important;
+}
+body#recharge-novum #recharge-te #rc_te-template-wrapper h2.page-title {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  font-family: var(--recharge-te-primary-font) !important;
+  text-align: left;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+/* Heading style ends */
+
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_card_element_wrapper {
+  background: var(--tertiary-background);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+@media (min-width: 650px) {
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_card_element_wrapper {
+    padding: 0px;
+  }
+}
+
+body#recharge-novum #recharge-te .element__border--top {
+  border-top: 1px solid var(--color-light-gray);
+  padding: 8px 0 8px 0px;
+}
+
+body#recharge-novum #recharge-te .element__flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body#recharge-novum #recharge-te .rc_photo_container img,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_photo_container img,
+body#recharge-novum #recharge-te .rc_image_container img,
+body#recharge-novum #recharge-te img {
+  object-fit: contain;
+  max-height: 100px;
+  max-width: 100px;
+  min-width: 100px;
+}
+
+@media (max-width: 767px) {
+  .rc_subscription_info_container .rc_photo_container {
+    margin-bottom: 20px !important;
+  }
+}
+
+/* ReCharge buttons begin */
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper button,
+body#recharge-novum #recharge-te button {
+  background-color: var(--color-transparent);
+  width: auto;
+}
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn,
+body#recharge-novum #recharge-te .rc_btn {
+  background-color: var(--primary-color);
+  color: var(--color-white);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 34px;
+  letter-spacing: 1.47px;
+  text-transform: none;
+  padding: 15px 20px;
+  height: 64px;
+}
+
+body#recharge-novum #recharge-te .rc_btn--link {
+  border: none !important;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 34px;
+  letter-spacing: 1.47px;
+  font-style: italic;
+  font-family: var(--recharge-te-secondary-font);
+}
+body#recharge-novum #recharge-te .rc_btn--link.disabled,
+body#recharge-novum #recharge-te .rc_btn--link[disabled] {
+  border: none !important;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 34px;
+  letter-spacing: 1.47px;
+  font-style: italic;
+  opacity: 50%;
+  pointer-events: none;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn--primary,
+body#recharge-novum #recharge-te .rc_btn--primary {
+  display: block;
+  color: var(--color-white);
+  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  align-self: center;
+  font-family: var(--recharge-te-secondary-font);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn--primary:hover,
+body#recharge-novum #recharge-te .rc_btn--primary:hover {
+  color: var(--primary-color);
+  background-color: var(--color-white);
+  border: 2px solid var(--primary-color);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn--secondary,
+body#recharge-novum #recharge-te .rc_btn--secondary,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .expired {
+  display: block;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  background-color: transparent;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  align-self: center;
+  font-family: var(--recharge-te-secondary-font);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn--secondary:hover,
+body#recharge-novum #recharge-te .rc_btn--secondary:hover {
+  background-color: var(--color-turquoise-blue) !important;
+  border-color: var(--color-turquoise-blue);
+  color: var(--color-white);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .expired:hover {
+    cursor: initial;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn--secondary--color {
+  background-color: var(--color-turquoise-blue) !important;
+  border-color: var(--color-turquoise-blue);
+  color: var(--color-white);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_btn--secondary--color:hover {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color);
+  color: var(--color-white) !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_cancel-btn,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .js-add-discount-btn {
+  color: var(--background-green);
+  cursor: pointer;
+}
+
+body#recharge-novum #recharge-te div.rc-tooltip {
+  font-family: var(--recharge-te-primary-font) !important;
+}
+
+/* ReCharge buttons end */
+
+body#recharge-novum #recharge-te #ReChargeForm_address input,
+body#recharge-novum #recharge-te #ReChargeForm_address select,
+body#recharge-novum #recharge-te #billingAddressForm input,
+body#recharge-novum #recharge-te #billingAddressForm select,
+body#recharge-novum #recharge-te #customer-card-form input,
+body#recharge-novum #recharge-te #ReChargeForm_applyDiscount input,
+body#recharge-novum #recharge-te #ReChargeForm_date input {
+  width: 100%;
+  border: 2px solid var(--color-light-gray);
+  margin-bottom: 15px;
+}
+
+body#recharge-novum #recharge-te #ReChargeForm_variant button[type=submit],
+body#recharge-novum #recharge-te #ReChargeForm_date button,
+body#recharge-novum #recharge-te #ReChargeForm_schedule button,
+body#recharge-novum #recharge-te #rc_manage_subscription_container div button,
+body#recharge-novum #recharge-te #ship__now--container button,
+body#recharge-novum #recharge-te #ReChargeForm_skip button,
+body#recharge-novum #recharge-te #rc_cancellation_reasons_list button,
+body#recharge-novum #recharge-te #te-modal-content button {
+  width: 100%;
+  margin-bottom: 15px;
+  font-family: (--recharge-te-secondary-font);
+}
+body#recharge-novum #recharge-te #rc_cancellation_reasons_list button[disabled] {
+  opacity: 0.4;
+}
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_loader {
+  height: 30px;
+  background-image: url(https://static.rechargecdn.com/static/images/spinner-anim-3.gif?t=1589649332);
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 20px;
+}
+
+/* Subscriptions style begin */
+body#recharge-novum #recharge-te #rc_te-template-wrapper .expired {
+  border-color: var(--color-subscription-expired);
+  color: var(--color-subscription-expired);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_add_product,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .page-title {
+  text-align: center;
+}
+
+body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 3fr 1fr;
+}
+body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper div.rc_photo_container {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper div.rc_schedule_wrapper {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper div.rc_subscription_next_charge_date {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+body#recharge-novum #recharge-te div.rc_inactive_subscriptions div.rc_subscription_prod_info--wrapper {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 24px;
+}
+@media (min-width: 650px) {
+  body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper div.rc_photo_container {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+  }
+  body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper div.rc_schedule_wrapper {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-left: 16px;
+    margin-top: 16px;
+  }
+  body#recharge-novum #recharge-te div.rc_active_subscriptions div.rc_subscription_prod_info--wrapper div.rc_subscription_next_charge_date {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    padding: 0px !important;
+    margin-left: 16px;
+    margin-bottom: 16px;
+    margin-top: 12px;
+  }
+  body#recharge-novum #recharge-te div.rc_inactive_subscriptions div.rc_subscription_prod_info--wrapper {
+    padding-bottom: 0px;
+  }
+  body#recharge-novum #recharge-te div.rc_inactive_subscriptions div.rc_subscription_prod_info--wrapper div.rc_schedule_wrapper {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+  body#recharge-novum #recharge-te div.rc_schedule_container div.rc_photo_container {
+    width: 200px;
+  }
+  body#recharge-novum #recharge-te div.rc_subscription_prod_info--wrapper div.rc_photo_container img,
+  body#recharge-novum #recharge-te div.rc_schedule_container div.rc_photo_container img {
+    max-height: 100% !important;
+    max-width: 100% !important;
+    height: 100%;
+    width: 100%;
+    object-fit: cover !important;
+  }
+  body#recharge-novum #recharge-te div.rc_subscription_next_charge_date {
+    display: block !important;
+    height: 26px;
+  }
+  body#recharge-novum #recharge-te div.rc_subscription_next_charge_date--wrapper {
+    margin: 0px !important;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_info_container {
+  display: flex;
+  flex-direction: column;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_info_container div.rc_schedule_wrapper {
+  margin-left: 16px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date {
+  text-align: center;
+  padding-top: 10px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date--wrapper {
+  background-color: var(--color-green);
+  color: #F5EFEB;
+  margin-bottom: 24px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date--wrapper p,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date--wrapper span,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date--wrapper {
+  font-family: var(--recharge-te-primary-font) !important;
+  font-size: 12px;
+  line-height: 26px;
+  letter-spacing: 0.75px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #next_charge_date_container input {
+  padding: 5px;
+}
+
+
+body#recharge-novum #recharge-te .rc_purchase_type:hover {
+  cursor: pointer;
+}
+
+/* Subscriptions style end */
+
+/* Edit subscription style begin  */
+
+body#recharge-novum #recharge-te .margin-left-5,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-left-5 {
+  margin-left: 5px;
+}
+
+body#recharge-novum #recharge-te .margin-right-5,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-right-5 {
+  margin-right: 5px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-right-20 {
+  margin-right: 20px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-top-15 {
+  margin-top: 15px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-top-17 {
+  margin-top: 17px;
+}
+
+body#recharge-novum #recharge-te .margin-bottom-8,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-bottom-8 {
+  margin-bottom: 8px;
+}
+
+body#recharge-novum #recharge-te .image-size,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .image-size {
+  height: 100px;
+  width: 100px;
+}
+
+body#recharge-novum #recharge-te #te-modal .upsell-text-clip,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .upsell_text--clip {
+  height: 29px;
+  text-transform: initial !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+body#recharge-novum #recharge-te #te-modal .upsell-text-center,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .upsell_text--center {
+  height: 29px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body#recharge-novum #recharge-te div.rc_subscription_card_element_wrapper div.rc_button_wrapper {
+  border-top: 1px solid var(--color-light-gray);
+  padding-top: 24px;
+}
+
+@media (min-width: 650px) {
+  body#recharge-novum #recharge-te div.rc_subscription_card_element_wrapper div.rc_button_wrapper,
+  body#recharge-novum #recharge-te div.rc_schedule_container div.rc_button_wrapper {
+    border-top: none;
+    padding-top: 0px;
+    width: 150px;
+    margin-right: 64px;
+  }
+}
+
+body#recharge-novum #recharge-te .rc_btn,
+body#recharge-novum #recharge-te .rc_btn--secondary {
+  padding: 15px 20px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li button {
+  width: 100%;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_discount_container:hover {
+  cursor: default !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .js-card {
+  z-index: 1;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li {
+  min-height: 210px;
+  position: relative;
+  overflow: hidden;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li .rc_upsells-btns {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--primary-color) !important;
+  position: absolute;
+  margin: 0;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  padding: 0 var(--rc-spacing-5);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_upsells-btns input[type=button] {
+  border-radius: 5px;
+  width: 100%;
+  color: var(--color-white);
+  width: 100%;
+  border: 1px solid var(--color-white);
+  cursor: pointer;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_upsells-btns input[type=button]:not(:last-child) {
+  margin-bottom: var(--rc-spacing-3);
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_upsells-btns input:hover {
+  background: var(--color-white) !important;
+  color: var(--primary-color) !important;
+  cursor: pointer !important;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_upsells-btns input:focus {
+  outline: none;
+}
+
+#rc_te-template-wrapper #rc_manage_subscription_container .upsells--wrapper .upsells-title {
+  font-family: var(--recharge-te-secondary-font);
+  font-style: normal;
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--input-color);
+}
+
+@media screen and (max-width: 749px) {
+  body#recharge-novum #recharge-te div.edit_subscription_info--wrapper div.rc_card_container__container {
+	display: flex;
+    flex-direction: column;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details {
+    order: 1;
+    flex-direction: column;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details div.rc-card {
+    background-color: var(--tertiary-background);
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details div.edit_subscription_info-product {
+    padding: 16px 0 16px 0;
+    margin: 0 8px 0 8px;
+    border-bottom: 1px solid var(--color-light-gray);
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details div.edit_subscription_info--buttons {
+    flex-direction: column;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--next-shipment {
+    order: 2;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--deliver-every {
+    order: 3;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.edit_subscription_cards--wrapper {
+    order: 4;
+    flex-direction: column;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--bottom-btns {
+    order: 5;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details,
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--next-shipment,
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--deliver-every,
+  body#recharge-novum #recharge-te div.rc_card_container__container div.subscription-shipping-address,
+  body#recharge-novum #recharge-te div.rc_card_container__container div.subscription-payment-method,
+  body#recharge-novum #recharge-te div.rc_card_container__container div.customer-email {
+    margin-bottom: 32px;
+  }
+}
+@media screen and (min-width: 750px) {
+  body#recharge-novum #recharge-te div.edit_subscription_info--wrapper div.rc_card_container__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr 1fr;
+    grid-gap: 24px;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--next-shipment {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    width: 100%;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--deliver-every {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    width: 100%;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    flex-direction: column;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.edit_subscription_cards--wrapper {
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+    grid-gap: 24px;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--bottom-btns {
+    grid-column: 1 / 3;
+    grid-row: 4 / 5;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details div.edit_subscription_info-product {
+    align-items: center;
+  }
+  body#recharge-novum #recharge-te div.rc_card_container__container div.card--prod-details div.edit_subscription_info--buttons {
+    margin-right: 24px;
+  }
+}
+
+/* Edit subscription style end  */
+
+body#recharge-novum #recharge-te #customer-card-form {
+  width: 100%;
+  height: 100%;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #133a3e;
+  font-weight: normal;
+  background-color: var(--tertiary-background);
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+
+/* orders page styles begin */
+body#recharge-novum #recharge-te div.rc_card_custom,
+body#recharge-novum #recharge-te div.rc_card_custom.rc-card {
+  border-bottom: 1px solid var(--color-light-gray);
+  margin-bottom: 24px !important;
+  padding-bottom: 24px !important;
+}
+body#recharge-novum #recharge-te div.rc-card {
+  box-shadow: none !important;
+  border-radius: 0px !important;
+  padding: 0px !important;
+}
+
+body#recharge-novum #recharge-te div.rc_card_custom p,
+body#recharge-novum #recharge-te div.rc_card_custom p * {
+  font-family: var(--recharge-te-primary-font);
+}
+
+@media (min-width: 650px) {
+  body#recharge-novum #recharge-te div.rc_card_custom {
+    display: flex !important;
+    flex-direction: row;
+  }
+}
+
+
+body#recharge-novum #recharge-te .rc_order_info_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+@media (min-width: 650px) {
+  body#recharge-novum #recharge-te .rc_order_info_container {
+      border-bottom: none;
+  }
+  body#recharge-novum #recharge-te div.rc_schedule_container,
+  body#recharge-novum #recharge-te .rc_order_info_container {
+    padding: 0px !important;
+  }
+  body#recharge-novum #recharge-te .rc_order_info_container div.rc_schedule_wrapper {
+    margin-top: 16px;
+    margin-left: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+body#recharge-novum #recharge-te .rc_order_info_container div.rc_schedule_wrapper {
+  margin-left: 16px;
+}
+
+body#recharge-novum #recharge-te div.scheduled-order div.action_buttons_wrapper {
+  width: 100%;
+}
+@media (min-width: 650px) {
+  body#recharge-novum #recharge-te div.scheduled-order div.action_buttons_wrapper {
+    width: fit-content;
+  }
+}
+
+body#recharge-novum #recharge-te .rc_order_title_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+body#recharge-novum #recharge-te div.rc_card_container .rc_order_title {
+  font-family: var(--recharge-te-secondary-font);
+  font-size: 19px;
+  line-height: 32px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-right-10,
+body#recharge-novum #recharge-te #info-modal .margin-right-10 {
+	margin-right: 10px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-right-20,
+body#recharge-novum #recharge-te #info-modal .margin-right-20 {
+	margin-right: 20px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-20-0,
+body#recharge-novum #recharge-te #info-modal .margin-20-0 {
+	margin: 20px 0px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-bottom-0,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_container .margin-bottom-0 {
+	margin-bottom: 0px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-bottom-10,
+body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_container .margin-bottom-10 {
+	margin-bottom: 10px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-bottom-20,
+body#recharge-novum #recharge-te #te-modal-content .margin-bottom-20 {
+	margin-bottom: 20px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .line-height-12,
+body#recharge-novum #recharge-te #te-modal-content .line-height-12 {
+  line-height: 12px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper .line-height-14,
+body#recharge-novum #recharge-te #te-modal-content .line-height-14 {
+  line-height: 14px;
+}
+
+body#recharge-novum #recharge-te #te-modal-content .order-number-date--wrapper {
+  margin-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+body#recharge-novum #recharge-te #te-modal-content div.rc_card_container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+body#recharge-novum #recharge-te #te-modal-content .order-line-items {
+  margin: 0px !important;
+}
+
+body#recharge-novum #recharge-te #te-modal-content .order-details,
+body#recharge-novum #recharge-te #te-modal-content .order-date {
+  font-family: var(--recharge-te-primary-font);
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--input-color);
+}
+body#recharge-novum #recharge-te #te-modal-content .order-details {
+  font-weight: 500;
+}
+
+body#recharge-novum #recharge-te .rc_order_title {
+  font-family: var(--recharge-te-secondary-font);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+  color: var(--color-dark-green);
+}
+
+body#recharge-novum #recharge-te p.schedule_meta_info {
+  font-family: var(--recharge-te-primary-font);
+  font-size: 16px !important;
+  line-height: 20px !important;
+}
+
+body#recharge-novum #recharge-te p.schedule_price_info {
+  font-family: var(--recharge-te-primary-font);
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 20px !important;
+}
+
+body#recharge-novum #recharge-te .order-photo {
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body#recharge-novum #recharge-te .order-number-date {
+  margin-bottom: 8px;
+}
+
+body#recharge-novum #recharge-te .order-photo img {
+  object-fit: cover;
+  height: 100%;
+  min-width: 70px;
+  border-radius: 50%;
+}
+
+/* orders page styles end */
+
+body#recharge-novum #recharge-te #search-container {
+  padding: 5px;
+}
+
+body#recharge-novum #recharge-te #search-container input {
+   width: 100%;
+   border: none;
+}
+
+body#recharge-novum #recharge-te #search-container input:focus {
+  outline: none;
+}
+
+body#recharge-novum #recharge-te .rc_product_list_container,
+body#recharge-novum #recharge-te #rc__upsells--container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  column-gap: 10px;
+  row-gap: 10px;
+  margin: 15px 0px;
+}
+
+body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container {
+    row-gap: 0px;
+}
+
+body#recharge-novum #recharge-te .rc_product_list_container li,
+body#recharge-novum #recharge-te #rc__upsells--container li {
+  padding: 10px;
+  min-height: 200px;
+}
+
+/* add product details */
+
+body#recharge-novum #recharge-te .rc_product_quantity {
+  width: 30%;
+  display: grid;
+  grid-template-rows: 42px;
+  grid-template-columns: 15px 40px 15px;
+  grid-gap: 14px;
+  text-align: center;
+  align-items: center;
+  overflow: hidden;
+  min-width: 104px;
+}
+
+body#recharge-novum #recharge-te .rc_product_quantity input {
+  outline: none;
+  border: none;
+  font-size: 16px;
+  padding: 0px;
+  padding-left: 8px;
+  height: 30px;
+}
+
+body#recharge-novum #recharge-te .rc_product_quantity .button-minus,
+body#recharge-novum #recharge-te .rc_product_quantity .button-plus
+ {
+  font-weight: 700;
+  font-size: 20px;
+  cursor: pointer;
+  border: none !important;
+  margin-bottom: 0 !important;
+}
+
+body#recharge-novum #recharge-te .order-date-desktop {
+  display: none;
+}
+
+/* add product details */
+body#recharge-novum #recharge-te .pagination_buttons_container,
+body#recharge-novum #recharge-te .rc__upsells--pagination_buttons_container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+body#recharge-novum #recharge-te .pagination_buttons_container li,
+body#recharge-novum #recharge-te .rc__upsells--pagination_buttons_container li {
+  margin-right: 15px;
+}
+
+/* addresses style begin */
+body#recharge-novum #recharge-te #rc_te-template-wrapper .address-info-msg {
+  font-style: italic;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.47px;
+  color: var(--input-color);
+}
+
+/* addresses style end */
+
+@media (min-width: 768px) {
+  /* subscriptions styles start */
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  body#recharge-novum #recharge-te .nav__list--mobile {
+    display: none !important;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_info_container {
+    flex-direction: row;
+    justify-content: start;
+    flex-basis: 50%;
+    text-align: inherit;
+    align-items: center;
+    padding-bottom: 0px;
+    padding-right: 15px;
+    border-bottom: none;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date {
+    display: flex;
+    flex-basis: 50%;
+    justify-content: space-between;
+    padding-left: 15px;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_subscription_next_charge_date div {
+    text-align: start;
+  }
+
+  /* subscriptions styles end */
+
+  /* schedule begin */
+
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_wrapper {
+    margin-left: 30px;
+  }
+
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .custom-font {
+    font-family: Roboto;
+  }
+
+  /* schedule end */
+
+  /* edit subscription styles begin */
+  .right-content {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc_manage_subscription_container {
+	  display: flex;
+   		flex-direction: column;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc_manage_subscription_container .edit_subscription_info--wrapper {
+    margin-right: 0;
+    flex-basis: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  body#recharge-novum > a, body#recharge-novum h3 {
+    width: 100%;
+    flex: 100%;
+}
+    #recharge-novum .rc_card_container.js-edit-next-charge-date, #recharge-novum  .rc_card_container.js-edit-frequency {
+    flex-basis: 50% !important;
+    width: 50%;
+    align-items: top;
+	}
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc_manage_subscription_container .upsells--wrapper {
+     flex-basis: 100%;
+  }
+  body#recharge-novum #recharge-te div.rc-card.js-edit-product {
+    display: flex;
+    width: 100%;
+    flex-basis: 100%;
+}
+  .edit_subscription_info--buttons {
+    flex-direction: column;
+    align-content: flex-end;
+    padding-left: 20px;
+}
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container .rc_product_card div button {
+    display: none;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .upsell-btn-mobile {
+    display: none;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li {
+    min-height: 170px;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+body#recharge-novum #recharge-te div.rc-card.js-edit-product {
+    display: flex;
+    width: 100%;
+    flex-basis: 100%;
+    background: #FCFBFA;
+}
+
+body#recharge-novum #recharge-te .edit_subscription_info--wrapper div.heading-and-edit .rc_btn--link {
+  margin-left: 56px;
+}
+
+.edit_subscription_info--buttons.d-flex.justify-space-between.align-items-center {
+    flex-direction: column;
+}
+
+.edit_subscription_info--buttons {
+    flex-direction: column;
+    align-content: flex-end;
+    padding-left: 20px;
+}
+
+.edit_subscription_info-product p.title-bold, .edit_subscription_info-product p.title-bold + div.d-flex {
+    width: 100%;
+    flex-basis: 100%;
+}
+
+.edit_subscription_info-product.d-flex.justify-space-between.align-items-center {
+    flex-direction: column;
+    width: 80%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+.rc-card.js-edit-product {
+    background: #FCFBFA;
+}
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .margin-top-17 {
+    font-family: var(--recharge-te-primary-font) !important;
+    font-size: 20px;
+    margin: 0 0 10px;
+}
+  body#recharge-novum #recharge-te #rc_te-template-wrapper #rc__upsells--container li:hover .rc_upsells-btns {
+    display: flex;
+  }
+
+  /* edit subscription styles end */
+  body#recharge-novum #recharge-te .order-date-desktop {
+    display: block;
+  }
+  body#recharge-novum #recharge-te .rc_order_info_container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px;
+    text-align: inherit;
+    align-items: center;
+  }
+  body#recharge-novum #recharge-te .order-date-mobile {
+    display: none;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_schedule_container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  body#recharge-novum #recharge-te .rc_order_title_container {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  body#recharge-novum #recharge-te .rc_image_container img.rc_img__sidebar {
+    width: 100%;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .page-title {
+    text-align: start;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_add_product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_add_product h3 {
+    margin-bottom: 0px;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_next_charge_date {
+    display: flex;
+    margin-left: 70px;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_next_charge_date div {
+    text-align: initial;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_next_charge_date a {
+    margin-left: 30px;
+  }
+  body#recharge-novum #recharge-te #rc_te-template-wrapper .rc_inactive_subscriptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* store styles fixes begin */
+/* wohven.com */
+body .logo--square {
+  position: static !important;
+}
+
+body .site-header.header-scroll {
+  position: relative !important;
+}
+
+/* freshandfrequent.com */
+
+body.cus_overflow {
+  overflow: visible;
+}
+
+/* fpvcrate.com */
+
+body#recharge-novum #main-body #shopify-section-announcement-bar.shopify-section {
+  position: relative;
+  z-index: 100000;
+}
+
+body#recharge-novum #main-body #shopify-section-header.shopify-section .header-wrapper .header-menu-wrapper .row .main-navigation-wrapper-main #main-navigation-wrapper {
+  border-color: #d1d1d1;
+  border-width: 1px 0;
+  border-style: solid;
+  z-index: 80000;
+  position: relative;
+  text-align: center;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  background: var(--color-white);
+}
+
+body#recharge-novum main#main-scrollbar {
+  opacity: 1;
+  pointer-events: all;
+}
+
+body#recharge-novum #mobile-loader {
+  display: none;
+}
+
+/* store styles fixes end */
+
+/* PAYMENT METHOD STYLES START */
+#recharge-novum .edit-shopify-payment-method-container {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+  #recharge-novum .payment-methods-page, #recharge-novum #ShippingPage {
+    margin-left: -42px !important;
+    margin-right: -42px !important;
+  }
+}
+
+body#recharge-novum #recharge-te #te-modal-content #PaymentMethodsMoveSubscriptions button {
+  border: none;
+  margin-bottom: 0;
+}
+/* PAYMENT METHOD STYLES END */
+
+/*  SHIPPING STYLES START */
+#recharge-novum #ShippingPage div.shipping-info-cards div.rc-expandable-card--details {
+  margin-top: 24px;
+}
+#recharge-novum div.shipping-info-cards div.rc-expandable-card--details div.subscription-item,
+#recharge-novum div.payment-method-cards div.rc-expandable-card--details div.subscription-item {
+  margin-bottom: 6px !important;
+}
+#recharge-novum #ShippingPage div.shipping-info-cards div.rc-expandable-card--details div.actions {
+  flex-direction: column-reverse;
+}
+#recharge-novum div.payment-method-cards div.rc-expandable-card--details div.actions {
+  flex-direction: column;
+}
+#recharge-novum #ShippingPage div.shipping-info-cards div.rc-expandable-card--details div.actions button {
+  margin-left: 0px;
+  margin-top: 12px;
+}
+@media screen and (max-width: 649px) {
+  #recharge-novum .shipping-page .payment-method-container {
+    margin-top: var(--rc-spacing-3) !important;
+  }
+
+  #recharge-novum #ShippingPage .add-shipping-info {
+    width: 100% !important;
+    margin-top: var(--rc-spacing-3) !important;
+  }
+}
+
+@media screen and (min-width: 650px) {
+  #recharge-novum #ShippingPage div.shipping-info-cards div.rc_card_custom {
+    flex-direction: column;
+  }
+  #recharge-novum div.rc-expandable-card--details div.rc-tooltip-container {
+    justify-content: center;
+  }
+}
+
+#recharge-novum #RechargePaymentMethodForm .payment-method-options {
+  display: flex;
+  flex-direction: column;
+}
+
+#recharge-novum .shipping-page .rc-expandable-card :is(.edit-address, .change-payment-method) {
+  display: none !important;
+}
+
+#recharge-novum .shipping-page .rc-expandable-card:is(.in, .open) :is(.edit-address, .change-payment-method) {
+  display: inline-flex !important;
+}
+/* SHIPPING STYLES END */
+
+#recharge-novum .card-logo {
+  width: 36px;
+  height: 24px;
+  background: rgba(8, 7, 7, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#recharge-novum .grid-250 {
+  display: grid;
+  width: 100%;
+  grid-gap: var(--rc-spacing-2);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+
+#recharge-novum .payment-method-options .rc-radio .text-body-2 {
+  line-height: 1rem;
+}
+
+#recharge-novum .payment-method-options .rc-radio .expires {
+  margin-top: var(--rc-spacing-2) !important;
+}
+
+/* SUBSCRIPTIONS START */
+#recharge-novum #RechargeShippingForm .edit-btn {
+  width: auto !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* We need to span entire width for the shipping radios */
+.shipping-radios, .shipping-radios .rc-radio, .shipping-radios .rc-radio__label {
+  width: 100%;
+}
+
+/* SUBSCRIPTIONS END */

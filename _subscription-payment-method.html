@@ -1,0 +1,449 @@
+<div
+    class="subscription-payment-method rc-card"
+    aria-label="{{ 'cp_payment_method_header' | t }}"
+>
+    <div class="d-flex justify-space-between align-items-center text-body-2">
+        <div class="card-content w-100">
+           	<div class="heading-and-edit border-btm d-flex justify-space-between">
+            	<h4 class="rc-subheading">{{ 'cp_payment_method_header' | t }}</h4>
+                <button type="button" class="rc_btn--link w-unset mb-0">Edit</button>
+          	</div>
+            <div class="mt-3" data-payment-method></div>
+            <i class="fas fa-chevron-right hidden"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const {
+            translations,
+            Novum: {
+                settings,
+                Utils: { addAccessibleClickListener },
+            },
+            Components: {
+                render,
+                renderPaymentMethodDetails,
+                createPaymentMethodDetails,
+                createRadio,
+                createAssociatedSubscriptions,
+                createSpinner,
+                translatePaymentMethod,
+            },
+            Toast,
+            Drawer,
+            Api,
+            pages: {
+                MoveSubscriptions,
+            },
+        } = ReCharge;
+
+        const state = {
+            isFetchingPaymentMethods: false,
+            paymentMethods: [],
+        };
+
+        const canAddPaymentMethod =
+            ReCharge.Novum.customer.can_add_payment_method;
+
+        function getCurrentPaymentMethod() {
+            return ReCharge.Novum.subscription.address.include.payment_methods[0]; // Selected is always the first
+        }
+
+        function renderPaymentMethod(paymentMethod) {
+            const paymentMethodEl = document.querySelector(
+                "[data-payment-method]"
+            );
+
+            if (paymentMethod) {
+                renderPaymentMethodDetails(paymentMethod, paymentMethodEl);
+            } else {
+                paymentMethodEl.innerHTML = `
+                    <div class="text-body-2 d-flex align-items-center">
+                        <svg class="mr-2" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 0.5C3.86 0.5 0.5 3.86 0.5 8C0.5 12.14 3.86 15.5 8 15.5C12.14 15.5 15.5 12.14 15.5 8C15.5 3.86 12.14 0.5 8 0.5ZM8.75 11.75H7.25V10.25H8.75V11.75ZM8.75 8.75H7.25V4.25H8.75V8.75Z" fill="#EC3D10"/>
+                        </svg>
+                        <span>${translations.subscription.noPaymentMethod}</span>
+                    </div>
+                    `;
+            }
+        }
+
+        // Fetches the paymentMethods and updates the global state
+        async function fetchPaymentMethods() {
+            try {
+                state.isFetchingPaymentMethods = true;
+                // Fetch and store the addresses for use later
+                state.paymentMethods = (await Api.getPaymentMethods()).data.payment_methods;
+            } catch (e) {
+                // If fetch fails for some reason, just use subscriptions
+                state.paymentMethods = [
+                    ReCharge.Novum.subscription.address.include
+                        .payment_methods[0],
+                ];
+            }
+            state.isFetchingPaymentMethods = false;
+            ReCharge.Novum.paymentMethods = state.paymentMethods;
+            return state.paymentMethods;
+        }
+
+        async function updateSubscriptionsPaymentMethod(
+            currentPaymentMethod,
+            newPaymentMethod
+        ) {
+            try {
+                window.locked = true;
+                const { RechargeMoveSubsForm } = document.forms;
+                // If there is no payment method currently, use the current subscription
+                const subscriptions = currentPaymentMethod
+                    ? currentPaymentMethod.subscriptions
+                    : [ReCharge.Novum.subscription];
+                const numOfSubs = subscriptions.length;
+                const submitBtn =
+                    RechargeMoveSubsForm.querySelector(".update-all-btn");
+
+                // Toggle the other button to be disabled for this request
+                await Api.submitRequest(
+                    () => {
+                        const uniqueAddressIds = [
+                            ...new Set(subscriptions.map((s) => s.address_id)),
+                        ];
+                        return Promise.all(
+                            uniqueAddressIds.map((id) =>
+                                Api.updateShippingAddress({
+                                    id,
+                                    payment_method_id: newPaymentMethod.id,
+                                })
+                            )
+                        );
+                    },
+                    {
+                        key: "updateSubscriptionPaymentMethod",
+                        submitButton: submitBtn,
+                        stayDisabled: true,
+                        successMessage:
+                            numOfSubs > 1
+                                ? translations.subscription.paymentMethod.successAll.replace(
+                                      "{numOfSubs}",
+                                      numOfSubs
+                                  )
+                                : translations.subscription.paymentMethod
+                                      .success,
+                    }
+                );
+                renderPaymentMethod(newPaymentMethod);
+                ReCharge.Novum.subscription.address.include.payment_methods[0] =
+                    newPaymentMethod;
+                Drawer.close({unlockWindow: true});
+            } catch (e) {
+                console.error(e);
+            } finally {
+                delete window.locked;
+            }
+        }
+
+        async function updateSelectedSubscriptionsPaymentMethod(subscription, newPaymentMethod) {
+            const updateSelectedOnlyEl = RechargeMoveSubsForm.querySelector('[data-update-selected-only]');
+
+            try {
+                window.locked = true;
+                const { address: updatedAddress, subscription: updatedSubscription } = await Api.submitRequest(
+                    () => Api.updatePaymentMethodForSelectedSubscriptionOnly(
+                        subscription,
+                        newPaymentMethod.id
+                    ),
+                    {
+                        key: 'updatePaymentMethodForSelectedSubscriptionOnly',
+                        submitButton: updateSelectedOnlyEl,
+                        successMessage: translations.subscription.paymentMethod.success,
+                        stayDisabled: true,
+                    }
+                );
+
+                renderPaymentMethod(updatedAddress.include.payment_methods[0]);
+
+                // Fetch address that includes associated subscriptions
+                updatedSubscription.address = await Api.getShippingAddress(updatedAddress.id, {includeSubscriptions: true});
+                ReCharge.Novum.subscription = updatedSubscription;
+
+                Drawer.close({unlockWindow: true});
+            } catch (e) {
+                console.error(e)
+            } finally {
+                delete window.locked;
+            }
+        }
+
+        // Renders the move subscriptions step
+        function renderMoveSubscriptions(selectedPaymentMethod) {
+            const { subscription } = ReCharge.Novum;
+
+            const currentPaymentMethod = state.paymentMethods.find(
+                (pm) => pm.id === getCurrentPaymentMethod()?.id
+            );
+
+            // Don't show the current subscription in the list
+            const filteredSubscriptions =
+                currentPaymentMethod?.subscriptions.filter(
+                    (sub) => sub.id !== subscription.id
+                ) || [];
+            const isSingleSub = filteredSubscriptions.length === 0;
+            // Show the current address subscriptions
+            const numOfSubs = currentPaymentMethod?.subscriptions.length || 1;
+            const paymentMethodText = translatePaymentMethod(
+                selectedPaymentMethod
+            ).title;
+            Drawer.toggleBackBtn(true, () => renderPaymentMethodSelection());
+            Drawer.setContent(`
+                <form id="RechargeMoveSubsForm" class="text-body-2">
+                    <div div class="font-bold">
+                        ${translations.subscription.paymentMethod.willUse
+                            .replace(
+                                "{productTitle}",
+                                subscription.product_title
+                            )
+                            .replace("{paymentMethod}", paymentMethodText)}
+                    </div>
+                    ${render(
+                        !isSingleSub &&
+                            `<div class="my-3">
+                                ${translations.subscription.paymentMethod.otherGrouped[
+                                    filteredSubscriptions.length === 1
+                                        ? "singular"
+                                        : "plural"
+                                ].replace(
+                                    "{numOfSubs}",
+                                    filteredSubscriptions.length
+                                )}
+                            </div>`
+                    )}
+                    ${render(
+                        filteredSubscriptions.length > 0 &&
+                            `<div class="associated-subs-container font-bold">
+                                ${createAssociatedSubscriptions(
+                                    filteredSubscriptions,
+                                    {
+                                        associatedSubsHeader: "",
+                                    }
+                                )}
+                            </div>`
+                    )}
+                    <div class="mt-3">
+                        ${translations.subscription.paymentMethod.confirmation[
+                            numOfSubs === 1 ? "singular" : "plural"
+                        ]
+                            .replace("{numOfSubs}", numOfSubs)
+                            .replace("{paymentMethod}", paymentMethodText)}
+                    </div>
+                    <button type="button" class="update-all-btn rc_btn rc_btn bbrc-btn mt-5 mb-2">
+                        ${
+                            numOfSubs === 1
+                                ? translations.subscription.paymentMethod
+                                      .updateSingleBtn
+                                : translations.subscription.paymentMethod.updateAllBtn.replace(
+                                      "{numOfSubs}",
+                                      numOfSubs
+                                  )
+                        }
+                    </button>
+                    ${render(!isSingleSub && `
+                        <button data-update-selected-only type="button" class="rc_btn rc_btn bbrc-btn w-100">
+                            Update ${subscription.product_title} only
+                        </button>`
+                    )}
+                </form>
+            `);
+
+            const { RechargeMoveSubsForm } = document.forms;
+
+            RechargeMoveSubsForm.querySelector(
+                ".update-all-btn"
+            )?.addEventListener("click", () => {
+                updateSubscriptionsPaymentMethod(
+                    currentPaymentMethod,
+                    selectedPaymentMethod
+                );
+            });
+
+            RechargeMoveSubsForm.querySelector('[data-update-selected-only]')?.addEventListener('click', () => {
+                updateSelectedSubscriptionsPaymentMethod(subscription, selectedPaymentMethod)
+            })
+        }
+
+        function renderNoPaymentMethods() {
+            const { domain } = window.ReCharge.Novum.store;
+
+            Drawer.open({
+                header: translations.paymentMethod.header,
+                content: `
+                    ${
+                        canAddPaymentMethod
+                            ? `<div class="empty text-center text-body-2">
+                                    <div class="text-center mb-5">${translations.subscription.paymentMethod.noPaymentMethod.notSci}</div>
+                                    <a class="add-payment-method rc_btn rc_btn bbrc-btn w-100" href="{{payment_methods_url}}&add=true">${translations.paymentMethods.addBtn}</a>
+                                </div>`
+                            : `
+                                <div class="empty text-center text-body-2">
+                                    <div class="text-center mb-5">${translations.subscription.paymentMethod.noPaymentMethod.sci}</div>
+                                    <a class="rc_btn rc_btn bbrc-btn w-100" href="https://${domain}" target="_blank">${translations.paymentMethods.newSubscriptionBtn}</a>
+                                </div>`
+                    }
+                `,
+            });
+        }
+
+        function renderSinglePaymentMethod(paymentMethod) {
+            Drawer.open({
+                header: translations.subscription.paymentMethod.header,
+                content: `
+                    <div class="mb-5 rc-subtext text-center">
+                        ${translations.subscription.paymentMethod.editPaymentMethodDetailsAlert}
+                        <a class="ml-1" href="{{payment_methods_url}}"><i class="fa fa-external-link-alt rc-subtext" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="single-payment-method-container mb-5"></div>
+                    ${render(canAddPaymentMethod && `
+                        <a href="{{payment_methods_url}}&add=true" class="rc_btn rc_btn bbrc-btn w-100">${translations.paymentMethods.addBtn}</a>
+                    `)}
+                `
+            });
+
+            const singlePaymentMethodContainer = document.querySelector('.single-payment-method-container');
+            MoveSubscriptions.renderPaymentMethod(singlePaymentMethodContainer, paymentMethod);
+        }
+
+        async function renderPaymentMethodSelection() {
+            const currentPaymentMethodId = getCurrentPaymentMethod()?.id;
+            Drawer.open({
+                header: translations.subscription.paymentMethod.header,
+                content: `
+                    <form id="RechargePaymentMethodForm">
+                        <div class="payment-methods">
+                            <div data-payment-methods-list class="d-flex flex-column"></div>
+                            <button type="button" class="next-btn rc_btn rc_btn bbrc_btn bbrc-btn mb-0" disabled>
+                                ${translations.subscription.goToConfirmation}
+                            </button>
+                           ${
+                               canAddPaymentMethod
+                                   ? `
+                                    <a href="{{payment_methods_url}}&add=true" class="add-btn rc_btn rc_btn bbrc-btn w-100 mt-2">
+                                        + ${translations.paymentMethods.addBtn}
+                                    </a>`
+                                   : ""
+                           }
+                        </div>
+                    </form>
+                `,
+            });
+
+            const { RechargePaymentMethodForm } = document.forms;
+
+            // bring current address to top
+            const paymentMethods = state.paymentMethods
+                .sort((a) => (a.id === currentPaymentMethodId ? -1 : 0)); 
+
+            const container = RechargePaymentMethodForm.querySelector(
+                "[data-payment-methods-list]"
+            );
+
+            // Render the radio's
+            paymentMethods.forEach((paymentMethod) => {
+                const radio = createRadio({
+                    id: `PaymentMethod${paymentMethod.id}`,
+                    name: "paymentMethod",
+                    label: `
+                        <div class="w-100">
+                            ${
+                                paymentMethod
+                                    ? createPaymentMethodDetails(paymentMethod)
+                                    : translations.shipping.noPaymentMethod
+                            }
+                        </div>`,
+                    value: paymentMethod.id,
+                    isChecked: paymentMethod.id === currentPaymentMethodId,
+                });
+                container.append(radio);
+            });
+
+            // On change, check to see if the payment method has changed and disable the next button.
+            RechargePaymentMethodForm.addEventListener("change", (form) => {
+                const selectedId = Number(
+                    document.querySelector('[name="paymentMethod"]:checked')
+                        .value
+                );
+                RechargePaymentMethodForm.querySelector(
+                    ".next-btn"
+                ).toggleAttribute(
+                    "disabled",
+                    currentPaymentMethodId === selectedId
+                );
+            });
+
+            RechargePaymentMethodForm.querySelector(
+                ".next-btn"
+            ).addEventListener("click", () => {
+                const selectedId = Number(
+                    new FormData(RechargePaymentMethodForm).get("paymentMethod")
+                );
+                renderMoveSubscriptions(
+                    state.paymentMethods.find((pm) => pm.id === selectedId)
+                );
+            });
+        }
+
+        // Event handler when the payment method card is clicked
+        async function onPaymentMethodClick() {
+            Drawer.open({
+                header: translations.subscription.paymentMethod.header,
+                content: `
+                    <form id="RechargePaymentMethodForm">
+                        <div class="loader mb-4 d-flex justify-center"></div>
+                    </form>
+                `,
+            });
+            const loader = document.querySelector(".loader");
+            const spinner = createSpinner({ size: 36 });
+            loader.append(spinner);
+            const paymentMethods = await fetchPaymentMethods(); // always resolves
+            loader.remove();
+
+            // If they closed drawer, don't continue
+            if (!document.forms.RechargePaymentMethodForm) return;
+
+            // If there are no payment methods, render the no payment methods step
+            if (!paymentMethods.length) {
+                renderNoPaymentMethods();
+                return;
+            }
+
+            const shouldRenderSinglePaymentMethod =
+                paymentMethods.length === 1 &&
+                paymentMethods[0]?.subscriptions?.some(sub => sub.id === ReCharge.Novum.subscription.id);
+                
+            if (shouldRenderSinglePaymentMethod) {
+                renderSinglePaymentMethod(paymentMethods[0]);
+                return;
+            }
+
+            renderPaymentMethodSelection();
+        }
+
+        async function init() {
+            const { subscription } = ReCharge.Novum;
+            const paymentMethod = getCurrentPaymentMethod();
+            renderPaymentMethod(paymentMethod);
+
+            const isExpired = subscription.status.toLowerCase() === "expired";
+            // Don't allow user to edit the payment method if it's expired
+            if (!isExpired) {
+                const cardEl = document.querySelector(
+                    ".subscription-payment-method"
+                );
+                cardEl.querySelector("i").classList.remove("d-none");
+                addAccessibleClickListener(cardEl, onPaymentMethodClick);
+            }
+        }
+
+        init();
+    })();
+</script>
